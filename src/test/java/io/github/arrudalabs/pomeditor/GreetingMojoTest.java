@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package io.github.arrudalabs;
+package io.github.arrudalabs.pomeditor;
 
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
