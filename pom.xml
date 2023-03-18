@@ -23,5 +23,37 @@
     <version>0.0.1-SNAPSHOT</version>
     <packaging>maven-plugin</packaging>
 
+    <organization>
+        <name>ArrudaLabs</name>
+        <url>https://github.com/arrudalabs</url>
+    </organization>
+
+    <scm>
+        <connection>scm:git:${project.scm.url}</connection>
+        <developerConnection>scm:git:${project.scm.url}</developerConnection>
+        <url>https://github.com/arrudalabs/poc-maven-plugin.git</url>
+        <tag>HEAD</tag>
+    </scm>
+
+    <developers>
+        <developer>
+            <name>Maximillian Arruda</name>
+            <email>dearrudam@gmail.com</email>
+        </developer>
+    </developers>
+
+    <name>POM Editor Maven Plugin</name>
+    <description>It's a Maven Plugin to allowing POM editions</description>
+
+    <url>https://arrudalabs.github.io/pom-editor-maven-plugin</url>
+
+    <licenses>
+        <license>
+            <name>Apache License, Version 2.0</name>
+            <url>https://www.apache.org/licenses/LICENSE-2.0</url>
+        </license>
+    </licenses>
+
+
 
 </project>
