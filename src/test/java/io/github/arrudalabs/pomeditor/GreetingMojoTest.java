@@ -41,7 +41,7 @@ class GreetingMojoTest {
     ArgumentCaptor<String> output;
 
     @Test
-    void test() throws MojoExecutionException, MojoFailureException {
+    void shouldExecuteWithNoErrors() {
         GreetingMojo mojo = newMojo();
         mojo.username = "Max";
         mojo.execute();
