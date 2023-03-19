@@ -118,7 +118,7 @@
             </dependency>
             <dependency>
                 <groupId>org.junit.jupiter</groupId>
-                <artifactId>junit-jupiter-engine</artifactId>
+                <artifactId>junit-jupiter</artifactId>
                 <version>${junit-jupiter-engine.version}</version>
             </dependency>
             <dependency>
@@ -178,7 +178,7 @@
         </dependency>
         <dependency>
             <groupId>org.junit.jupiter</groupId>
-            <artifactId>junit-jupiter-engine</artifactId>
+            <artifactId>junit-jupiter</artifactId>
             <scope>test</scope>
         </dependency>
         <dependency>
@@ -386,7 +386,7 @@
                                 <module name="HideUtilityClassConstructor" />
 
                                 <module name="com.puppycrawl.tools.checkstyle.checks.design.VisibilityModifierCheck">
-                                    <property name="packageAllowed" value="false" />
+                                    <property name="packageAllowed" value="true" />
                                     <property name="protectedAllowed" value="true" />
                                     <property name="publicMemberPattern" value="^serialVersionUID" />
                                     <property name="severity" value="warning" />
