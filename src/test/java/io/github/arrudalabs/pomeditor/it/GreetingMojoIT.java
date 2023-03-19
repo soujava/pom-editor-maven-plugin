@@ -19,7 +19,6 @@ package io.github.arrudalabs.pomeditor.it;
 import com.soebes.itf.jupiter.extension.MavenGoal;
 import com.soebes.itf.jupiter.extension.MavenJupiterExtension;
 import com.soebes.itf.jupiter.extension.MavenTest;
-import com.soebes.itf.jupiter.extension.SystemProperties;
 import com.soebes.itf.jupiter.extension.SystemProperty;
 import com.soebes.itf.jupiter.maven.MavenExecutionResult;
 
@@ -30,7 +29,7 @@ class GreetingMojoIT {
 
     @MavenTest
     @MavenGoal("${project.groupId}:${project.artifactId}:${project.version}:hello")
-    @SystemProperties(@SystemProperty(value = "username", content = "Max"))
+    @SystemProperty(value = "username", content = "Max")
     void hello(MavenExecutionResult result) {
         assertThat(result)
                 .isSuccessful()
