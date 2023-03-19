@@ -41,7 +41,12 @@ public class AddDependencyMojo extends AbstractMojo {
                 PomTransformer.SimpleElementWhitespace.AUTODETECT_PREFER_EMPTY)
                 .transform(
                         Transformation.addDependencyIfNeeded(
-                                new Gavtcs(params.groupId, params.artifactId, params.version, params.type, params.classifier, params.scope),
+                                new Gavtcs(params.groupId,
+                                        params.artifactId,
+                                        params.version,
+                                        params.type,
+                                        params.classifier,
+                                        params.scope),
                                 Gavtcs.scopeAndTypeFirstComparator())
                 );
     };
@@ -69,7 +74,6 @@ public class AddDependencyMojo extends AbstractMojo {
         }
         return this.pomTransformer;
     }
-
 
     void validate() throws MojoExecutionException {
         validateGroupId();
