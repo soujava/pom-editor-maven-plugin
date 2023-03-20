@@ -662,7 +662,7 @@
     <distributionManagement>
         <site>
             <id>github</id>
-            <url>scm:git:ssh://git@github.com/arrudalabs/poc-maven-plugin.git</url>
+            <url>scm:git:ssh://git@github.com/arrudalabs/pom-maven-plugin.git</url>
         </site>
         <snapshotRepository>
             <id>ossrh</id>
