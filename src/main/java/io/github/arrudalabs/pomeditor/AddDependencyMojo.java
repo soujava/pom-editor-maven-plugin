@@ -19,91 +19,76 @@ package io.github.arrudalabs.pomeditor;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
+import org.apache.maven.plugin.logging.Log;
 import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
-import org.l2x6.pom.tuner.PomTransformer;
-import org.l2x6.pom.tuner.PomTransformer.Transformation;
-import org.l2x6.pom.tuner.model.Gavtcs;
 
-import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Optional;
 import java.util.function.BiConsumer;
 
 /**
- * add a given dependency to a target POM
+ * Mojo responsible to add a given dependency to a target POM
+ * if such dependency is not declared
+ * or the given dependency's version is greater than the existent at target POM
  */
 @Mojo(name = "add-dep")
 public class AddDependencyMojo extends AbstractMojo {
-
-    private static BiConsumer<Path, AddDependencyMojo> defaultPomTransformer = (pomPath, params) -> {
-        new PomTransformer(pomPath, StandardCharsets.UTF_8,
-                PomTransformer.SimpleElementWhitespace.AUTODETECT_PREFER_EMPTY)
-                .transform(
-                        Transformation.addDependencyIfNeeded(
-                                new Gavtcs(params.groupId,
-                                        params.artifactId,
-                                        params.version,
-                                        params.type,
-                                        params.classifier,
-                                        params.scope),
-                                Gavtcs.scopeAndTypeFirstComparator())
-                );
-    };
 
     @Parameter(property = "groupId")
     String groupId;
     @Parameter(property = "artifactId")
     String artifactId;
-    @Parameter(property = "version", defaultValue = "")
-    String version = "";
-    @Parameter(property = "type", defaultValue = "")
-    String type = "";
-    @Parameter(property = "classifier", defaultValue = "")
-    String classifier = "";
-    @Parameter(property = "scope", defaultValue = "")
-    String scope = "";
+    @Parameter(property = "version")
+    String version;
+    @Parameter(property = "type")
+    String type;
+    @Parameter(property = "classifier")
+    String classifier;
+    @Parameter(property = "scope")
+    String scope;
     @Parameter(property = "pom", defaultValue = "pom.xml")
     String pom = "pom.xml";
 
-    BiConsumer<Path, AddDependencyMojo> pomTransformer;
+    PomEditor pomEditor;
 
-    BiConsumer<Path, AddDependencyMojo> getPomTransformer() {
-        if (this.pomTransformer == null) {
-            return defaultPomTransformer;
-        }
-        return this.pomTransformer;
-    }
+    BiConsumer<Log, Path> backupFunction;
 
-    void validate() throws MojoExecutionException {
-        validateGroupId();
-        validateArtifactIt();
-    }
+    BiConsumer<Log, Path> rollbackFunction;
+
 
     @Override
     public void execute() throws MojoExecutionException, MojoFailureException {
-        validate();
+        Path pomFile = Paths.get(pom);
+        boolean doRollback = false;
         try {
-            getPomTransformer().accept(Paths.get(pom), this);
+            Optional.ofNullable(backupFunction)
+                    .orElse(PomChangeTransaction::backup)
+                    .accept(getLog(), pomFile);
+
+            Optional.ofNullable(pomEditor)
+                    .orElseGet(PomEditor::new)
+                    .execute(
+                            new AddDependency(
+                                    pomFile,
+                                    Dependency.builder()
+                                            .setGroupId(groupId)
+                                            .setArtifactId(artifactId)
+                                            .setVersion(version)
+                                            .setType(type)
+                                            .setClassifier(classifier)
+                                            .setScope(scope)
+                                            .build()));
         } catch (RuntimeException ex) {
+            doRollback = true;
             throw new MojoExecutionException(ex);
+        } finally {
+            if (doRollback) {
+                Optional.ofNullable(rollbackFunction)
+                        .orElse(PomChangeTransaction::rollback)
+                        .accept(getLog(), pomFile);
+            }
         }
     }
-
-    private boolean isNullOrBlank(String artifactId) {
-        return artifactId == null || artifactId.isBlank();
-    }
-
-    private void validateArtifactIt() throws MojoExecutionException {
-        if (isNullOrBlank(artifactId)) {
-            throw new MojoExecutionException("artifactId cannot be null or empty");
-        }
-    }
-
-    private void validateGroupId() throws MojoExecutionException {
-        if (isNullOrBlank(groupId)) {
-            throw new MojoExecutionException("groupId cannot be null or empty");
-        }
-    }
-
 }

@@ -19,6 +19,7 @@ package io.github.arrudalabs.pomeditor;
 
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
+import org.apache.maven.plugin.logging.Log;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -37,26 +38,42 @@ import java.util.stream.Stream;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.params.provider.Arguments.arguments;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.atLeastOnce;
+import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 
 @ExtendWith(MockitoExtension.class)
 class AddDependencyMojoTest {
 
+    @Mock
+    PomEditor pomEditor;
+
+    @Mock
+    BiConsumer<Log, Path> backupFunction;
+
+    @Mock
+    BiConsumer<Log, Path> rollbackFunction;
+
+    @Captor
+    ArgumentCaptor<AddDependency> addDependency;
 
     @DisplayName("should return error when")
-    @ParameterizedTest(name = "{index} groupId={0}, artifactId={1}, version={2}")
+    @ParameterizedTest(name = "groupId={0}, artifactId={1}")
     @MethodSource("invalidParameters")
     void shouldReturnErrorsForInvalidRequiredParameters(final String groupId,
                                                         final String artifactId) {
-
-        AddDependencyMojo mojo = new AddDependencyMojo();
-        mojo.groupId = groupId;
-        mojo.artifactId = artifactId;
-
         Assertions.assertThrows(MojoExecutionException.class, () -> {
-            mojo.validate();
+            AddDependencyMojo mojo = new AddDependencyMojo();
+            mojo.backupFunction = backupFunction;
+            mojo.rollbackFunction = rollbackFunction;
+            mojo.groupId = groupId;
+            mojo.artifactId = artifactId;
+            mojo.execute();
         });
+
+        verify(backupFunction, atLeastOnce()).accept(any(), any());
+        verify(rollbackFunction, atLeastOnce()).accept(any(), any());
     }
 
     static Stream<Arguments> invalidParameters() {
@@ -88,32 +105,46 @@ class AddDependencyMojoTest {
         );
     }
 
-    @Mock
-    BiConsumer<Path, AddDependencyMojo> pomTransformer;
-
-    @Captor
-    ArgumentCaptor<Path> pomPath;
-
-    @Captor
-    ArgumentCaptor<AddDependencyMojo> params;
 
     @Test
     void shouldAddDependencyProperly() throws MojoExecutionException, MojoFailureException {
 
         //Given
-        AddDependencyMojo mojo = new AddDependencyMojo();
+        AddDependencyMojo mojo = newMojo();
         mojo.groupId = "groupId";
         mojo.artifactId = "artifactId";
-        mojo.pomTransformer = pomTransformer;
+        mojo.version = "222";
+        mojo.type = "jar";
+        mojo.classifier = "classified";
+        mojo.scope = "compile";
+        mojo.pomEditor = pomEditor;
+
 
         //When
         mojo.execute();
 
         //Then
-        verify(pomTransformer, atLeastOnce()).accept(pomPath.capture(), params.capture());
-        assertThat(Path.of("pom.xml")).isEqualTo(pomPath.getValue());
-        assertThat(mojo).isSameAs(params.getValue());
+        verify(pomEditor, atLeastOnce()).execute(addDependency.capture());
+        verify(backupFunction, atLeastOnce()).accept(any(), any());
+        verify(rollbackFunction, never()).accept(any(), any());
 
+
+        var addDependency = this.addDependency.getValue();
+        assertThat(addDependency.pom).isEqualTo(Path.of(mojo.pom));
+        assertThat(addDependency.dependency.getGroupId()).isEqualTo(mojo.groupId);
+        assertThat(addDependency.dependency.getArtifactId()).isEqualTo(mojo.artifactId);
+        assertThat(addDependency.dependency.getVersion()).isEqualTo(mojo.version);
+        assertThat(addDependency.dependency.getType()).isEqualTo(mojo.type);
+        assertThat(addDependency.dependency.getClassifier()).isEqualTo(mojo.classifier);
+        assertThat(addDependency.dependency.getScope()).isEqualTo(mojo.scope);
+
+    }
+
+    private AddDependencyMojo newMojo() {
+        AddDependencyMojo mojo = new AddDependencyMojo();
+        mojo.backupFunction = backupFunction;
+        mojo.rollbackFunction = rollbackFunction;
+        return mojo;
     }
 
 }
