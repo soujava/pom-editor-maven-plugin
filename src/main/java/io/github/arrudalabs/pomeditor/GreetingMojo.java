@@ -21,7 +21,7 @@ import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
 
 /**
- * Says "Hi, ${username}!" to the output
+ * Says "Hi" to the output
  */
 @Mojo(name = "hello")
 public class GreetingMojo extends AbstractMojo {
