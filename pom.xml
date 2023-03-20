@@ -20,7 +20,7 @@
 
     <groupId>io.github.arrudalabs</groupId>
     <artifactId>pom-editor-maven-plugin</artifactId>
-    <version>0.0.1</version>
+    <version>0.0.2-SNAPSHOT</version>
     <packaging>maven-plugin</packaging>
 
     <organization>
@@ -32,7 +32,7 @@
         <connection>scm:git:${project.scm.url}</connection>
         <developerConnection>scm:git:${project.scm.url}</developerConnection>
         <url>https://github.com/arrudalabs/pom-editor-maven-plugin.git</url><!-- it's required by release processes -->
-        <tag>0.0.1</tag>
+        <tag>HEAD</tag>
     </scm>
 
     <developers>
