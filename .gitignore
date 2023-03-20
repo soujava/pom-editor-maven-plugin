@@ -324,4 +324,6 @@ dist/
 nbdist/
 .nb-gradle/
 
-# End of https://www.toptal.com/developers/gitignore/api/maven,intellij,intellij+iml,intellij+all,netbeans,eclipse
+# End of https://www.toptal.com/developers/gitignore/api/maven,intellij,intellij+iml,intellij+all,netbeans,eclipse.teste/*
+
+.teste/

@@ -17,22 +17,31 @@
 package io.github.arrudalabs.pomeditor;
 
 import org.apache.maven.plugin.AbstractMojo;
+import org.apache.maven.plugin.MojoExecutionException;
+import org.apache.maven.plugin.MojoFailureException;
+import org.apache.maven.plugin.logging.Log;
 import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
 
-/**
- * Says "Hi" to the output
- */
-@Mojo(name = "hello")
-public class GreetingMojo extends AbstractMojo {
+import java.nio.file.Path;
+import java.util.Optional;
+import java.util.function.BiConsumer;
 
-    @Parameter(property = "username")
-    String username;
+/**
+ * Responsible for delete the backup file
+ */
+@Mojo(name = "commit")
+public class CommitMojo extends AbstractMojo {
+
+    @Parameter(property = "pom", defaultValue = "pom.xml")
+    String pom = "pom.xml";
+
+    BiConsumer<Log, Path> commitFunction;
 
     @Override
-    public void execute() {
-
-        getLog().info(String.format("Hi, %s!", username));
-
+    public void execute() throws MojoExecutionException, MojoFailureException {
+        Optional.ofNullable(commitFunction)
+                .orElse(PomChangeTransaction::commit)
+                .accept(getLog(), Path.of(pom));
     }
 }

@@ -14,25 +14,13 @@
  * limitations under the License.
  */
 
-package io.github.arrudalabs.pomeditor;
+package io.github.arrudalabs.pomeditor.it;
 
-import org.apache.maven.plugin.AbstractMojo;
-import org.apache.maven.plugins.annotations.Mojo;
-import org.apache.maven.plugins.annotations.Parameter;
+import com.soebes.itf.jupiter.extension.MavenGoal;
+import com.soebes.itf.jupiter.extension.MavenJupiterExtension;
 
-/**
- * Says "Hi" to the output
- */
-@Mojo(name = "hello")
-public class GreetingMojo extends AbstractMojo {
+@MavenJupiterExtension
+@MavenGoal("${project.groupId}:${project.artifactId}:${project.version}:commit")
+class CommitMojoIT {
 
-    @Parameter(property = "username")
-    String username;
-
-    @Override
-    public void execute() {
-
-        getLog().info(String.format("Hi, %s!", username));
-
-    }
 }
