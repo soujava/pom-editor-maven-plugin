@@ -32,7 +32,7 @@
     <scm>
         <connection>scm:git:${project.scm.url}</connection>
         <developerConnection>scm:git:${project.scm.url}</developerConnection>
-        <url>https://github.com/arrudalabs/poc-maven-plugin.git</url>
+        <url>https://github.com/arrudalabs/pom-maven-plugin.git</url><!-- it's required by release processes -->
         <tag>HEAD</tag>
     </scm>
 
