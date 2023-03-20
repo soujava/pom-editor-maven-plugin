@@ -109,6 +109,24 @@ public final class Dependency {
     }
 
     @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("{");
+        sb.append("groupId='" + groupId + '\'');
+        sb.append(", artifactId='" + artifactId + '\'');
+        if (version != null)
+            sb.append(", version='" + version + '\'');
+        if (type != null)
+            sb.append(", type='" + type + '\'');
+        if (classifier != null)
+            sb.append(", classifier='" + classifier + '\'');
+        if (scope != null)
+            sb.append(", scope='" + scope + '\'');
+        sb.append("}");
+        return sb.toString();
+    }
+
+    @Override
     public int hashCode() {
         return Objects.hash(groupId, artifactId, version, type, classifier, scope);
     }
