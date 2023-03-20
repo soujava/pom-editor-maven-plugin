@@ -15,13 +15,12 @@
   ~    limitations under the License.
   ~
   -->
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>io.github.arrudalabs</groupId>
     <artifactId>pom-editor-maven-plugin</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>0.0.1</version>
     <packaging>maven-plugin</packaging>
 
     <organization>
@@ -33,7 +32,7 @@
         <connection>scm:git:${project.scm.url}</connection>
         <developerConnection>scm:git:${project.scm.url}</developerConnection>
         <url>https://github.com/arrudalabs/pom-editor-maven-plugin.git</url><!-- it's required by release processes -->
-        <tag>HEAD</tag>
+        <tag>0.0.1</tag>
     </scm>
 
     <developers>
@@ -316,93 +315,90 @@
                         <module name="Checker">
 
                             <module name="FileLength">
-                                <property name="max" value="3500"/>
-                                <property name="fileExtensions" value="java"/>
+                                <property name="max" value="3500" />
+                                <property name="fileExtensions" value="java" />
                             </module>
 
                             <module name="LineLength">
-                                <property name="max" value="180"/>
-                                <property name="ignorePattern" value="@version|@see"/>
+                                <property name="max" value="180" />
+                                <property name="ignorePattern" value="@version|@see" />
                             </module>
 
-                            <module name="FileTabCharacter"/>
+                            <module name="FileTabCharacter" />
 
                             <module name="TreeWalker">
-                                <module name="SuppressionCommentFilter"/>
+                                <module name="SuppressionCommentFilter" />
                                 <module name="ConstantName">
-                                    <property name="format" value="^(_?[a-z][a-zA-Z0-9]*|([A-Z](_?[A-Z0-9]+)*))$"/>
+                                    <property name="format" value="^(_?[a-z][a-zA-Z0-9]*|([A-Z](_?[A-Z0-9]+)*))$" />
                                 </module>
 
-                                <module name="LocalVariableName"/>
+                                <module name="LocalVariableName" />
                                 <module name="MethodName">
-                                    <property name="format" value="^_?[a-z][a-zA-Z0-9]*$"/>
+                                    <property name="format" value="^_?[a-z][a-zA-Z0-9]*$" />
                                 </module>
-                                <module name="PackageName"/>
-                                <module name="LocalFinalVariableName"/>
-                                <module name="ParameterName"/>
-                                <module name="StaticVariableName"/>
+                                <module name="PackageName" />
+                                <module name="LocalFinalVariableName" />
+                                <module name="ParameterName" />
+                                <module name="StaticVariableName" />
                                 <module name="TypeName">
-                                    <property name="format" value="^_?[A-Z][a-zA-Z0-9]*$"/>
+                                    <property name="format" value="^_?[A-Z][a-zA-Z0-9]*$" />
                                 </module>
 
                                 <module name="AvoidStarImport">
-                                    <property name="excludes"
-                                              value="java.io,java.net,java.util,jakarta.enterprise.inject.spi,jakarta.enterprise.context"/>
+                                    <property name="excludes" value="java.io,java.net,java.util,jakarta.enterprise.inject.spi,jakarta.enterprise.context" />
                                 </module>
-                                <module name="IllegalImport"/>
-                                <module name="RedundantImport"/>
-                                <module name="UnusedImports"/>
+                                <module name="IllegalImport" />
+                                <module name="RedundantImport" />
+                                <module name="UnusedImports" />
 
                                 <module name="MethodLength">
-                                    <property name="max" value="250"/>
+                                    <property name="max" value="250" />
                                 </module>
                                 <module name="ParameterNumber">
-                                    <property name="max" value="15"/>
+                                    <property name="max" value="15" />
                                 </module>
 
                                 <module name="EmptyBlock">
-                                    <property name="option" value="text"/>
+                                    <property name="option" value="text" />
                                 </module>
 
                                 <module name="NeedBraces">
-                                    <property name="tokens"
-                                              value="LITERAL_DO, LITERAL_ELSE, LITERAL_FOR, LITERAL_WHILE"/>
+                                    <property name="tokens" value="LITERAL_DO, LITERAL_ELSE, LITERAL_FOR, LITERAL_WHILE" />
                                 </module>
                                 <module name="LeftCurly">
-                                    <property name="option" value="EOL"/>
+                                    <property name="option" value="EOL" />
                                 </module>
                                 <module name="RightCurly">
-                                    <property name="option" value="SAME"/>
+                                    <property name="option" value="SAME" />
                                 </module>
 
-                                <module name="EmptyStatement"/>
-                                <module name="EqualsHashCode"/>
-                                <module name="DefaultComesLast"/>
-                                <module name="MissingSwitchDefault"/>
-                                <module name="FallThrough"/>
-                                <module name="MultipleVariableDeclarations"/>
+                                <module name="EmptyStatement" />
+                                <module name="EqualsHashCode" />
+                                <module name="DefaultComesLast" />
+                                <module name="MissingSwitchDefault" />
+                                <module name="FallThrough" />
+                                <module name="MultipleVariableDeclarations" />
 
                                 <module name="com.puppycrawl.tools.checkstyle.checks.design.DesignForExtensionCheck">
-                                    <property name="severity" value="ignore"/>
+                                    <property name="severity" value="ignore" />
                                 </module>
 
-                                <module name="HideUtilityClassConstructor"/>
+                                <module name="HideUtilityClassConstructor" />
 
                                 <module name="com.puppycrawl.tools.checkstyle.checks.design.VisibilityModifierCheck">
-                                    <property name="packageAllowed" value="true"/>
-                                    <property name="protectedAllowed" value="true"/>
-                                    <property name="publicMemberPattern" value="^serialVersionUID"/>
-                                    <property name="severity" value="warning"/>
+                                    <property name="packageAllowed" value="true" />
+                                    <property name="protectedAllowed" value="true" />
+                                    <property name="publicMemberPattern" value="^serialVersionUID" />
+                                    <property name="severity" value="warning" />
                                 </module>
 
-                                <module name="UpperEll"/>
+                                <module name="UpperEll" />
 
                                 <module name="AnnotationLocation">
-                                    <property name="allowSamelineMultipleAnnotations" value="false"/>
-                                    <property name="allowSamelineSingleParameterlessAnnotation" value="false"/>
-                                    <property name="allowSamelineParameterizedAnnotation" value="false"/>
-                                    <property name="tokens"
-                                              value="CLASS_DEF, INTERFACE_DEF, ENUM_DEF, METHOD_DEF, CTOR_DEF, VARIABLE_DEF, ANNOTATION_DEF"/>
+                                    <property name="allowSamelineMultipleAnnotations" value="false" />
+                                    <property name="allowSamelineSingleParameterlessAnnotation" value="false" />
+                                    <property name="allowSamelineParameterizedAnnotation" value="false" />
+                                    <property name="tokens" value="CLASS_DEF, INTERFACE_DEF, ENUM_DEF, METHOD_DEF, CTOR_DEF, VARIABLE_DEF, ANNOTATION_DEF" />
                                 </module>
                             </module>
                         </module>
