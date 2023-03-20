@@ -63,23 +63,25 @@ public class AddDependencyMojo extends AbstractMojo {
         Path pomFile = Paths.get(pom);
         boolean doRollback = false;
         try {
+
             Optional.ofNullable(backupFunction)
                     .orElse(PomChangeTransaction::backup)
                     .accept(getLog(), pomFile);
 
+            var dependency = Dependency.builder()
+                    .setGroupId(groupId)
+                    .setArtifactId(artifactId)
+                    .setVersion(version)
+                    .setType(type)
+                    .setClassifier(classifier)
+                    .setScope(scope)
+                    .build();
+
             Optional.ofNullable(pomEditor)
                     .orElseGet(PomEditor::new)
-                    .execute(
-                            new AddDependency(
-                                    pomFile,
-                                    Dependency.builder()
-                                            .setGroupId(groupId)
-                                            .setArtifactId(artifactId)
-                                            .setVersion(version)
-                                            .setType(type)
-                                            .setClassifier(classifier)
-                                            .setScope(scope)
-                                            .build()));
+                    .execute(new AddDependency(pomFile, dependency));
+
+            getLog().info(String.format("added the dependency: %s to the pom: %s ", dependency, pomFile));
         } catch (RuntimeException ex) {
             doRollback = true;
             throw new MojoExecutionException(ex);

@@ -41,5 +41,4 @@ class AddDependency {
         this.pom = pom;
         this.dependency = dependency;
     }
-
 }
