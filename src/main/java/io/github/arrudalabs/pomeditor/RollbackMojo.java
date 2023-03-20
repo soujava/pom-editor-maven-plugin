@@ -28,7 +28,7 @@ import java.util.Optional;
 import java.util.function.BiConsumer;
 
 /**
- * Responsible for rollback the change process
+ * Restore the target POM file with the backup POM file
  */
 @Mojo(name = "rollback")
 public class RollbackMojo extends AbstractMojo {

@@ -28,7 +28,7 @@ import java.util.Optional;
 import java.util.function.BiConsumer;
 
 /**
- * Responsible for delete the backup file
+ * Remove backup POM file
  */
 @Mojo(name = "commit")
 public class CommitMojo extends AbstractMojo {
