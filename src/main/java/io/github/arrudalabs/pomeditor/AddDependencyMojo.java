@@ -79,7 +79,7 @@ public class AddDependencyMojo extends AbstractMojo {
 
             Optional.ofNullable(pomEditor)
                     .orElseGet(PomEditor::new)
-                    .execute(new AddDependency(pomFile, dependency));
+                    .execute(pomFile, dependency);
 
             getLog().info(String.format("added the dependency: %s to the pom: %s ", dependency, pomFile));
         } catch (RuntimeException ex) {

@@ -20,6 +20,7 @@ import org.l2x6.pom.tuner.PomTransformer;
 import org.l2x6.pom.tuner.model.Gavtcs;
 
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Path;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.BiConsumer;
@@ -30,23 +31,22 @@ import java.util.stream.Collectors;
  */
 class PomEditor {
     /**
-     * Add a dependency informed by the {@link AddDependency} instance
-     *
-     * @param request it's an {@link AddDependency} instance
+     * Add a dependency informed by the {@link Dependency} instance into the target POM xml
+     * @param pom it's the target POM xml
+     * @param dependency it's an {@link Dependency} instance
      */
-    void execute(AddDependency request) {
+    void execute(Path pom, Dependency dependency) {
         new PomTransformer(
-                request.pom,
+                pom,
                 StandardCharsets.UTF_8,
                 PomTransformer.SimpleElementWhitespace.AUTODETECT_PREFER_SPACE)
-                .transform(addOrUpdateDependencyIfNeeded(request));
-
+                .transform(addOrUpdateDependencyIfNeeded(dependency));
     }
 
-    private PomTransformer.Transformation addOrUpdateDependencyIfNeeded(AddDependency params) {
+    private PomTransformer.Transformation addOrUpdateDependencyIfNeeded(Dependency dependencyToBeAdded) {
         return (document, context) -> {
 
-            Gavtcs dependency = toGavtcs(params.dependency);
+            Gavtcs dependency = toGavtcs(dependencyToBeAdded);
 
             List<PomTransformer.NodeGavtcs> dependencies = context.getDependencies()
                     .stream()

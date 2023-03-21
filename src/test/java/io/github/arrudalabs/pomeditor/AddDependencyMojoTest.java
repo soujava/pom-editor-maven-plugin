@@ -60,7 +60,9 @@ class AddDependencyMojoTest {
     BiConsumer<Log, Path> rollbackFunction;
 
     @Captor
-    ArgumentCaptor<AddDependency> addDependency;
+    ArgumentCaptor<Path> targetPom;
+    @Captor
+    ArgumentCaptor<Dependency> dependencyToBeAdded;
 
     @DisplayName("should return error when")
     @ParameterizedTest(name = "groupId={0}, artifactId={1}")
@@ -128,20 +130,19 @@ class AddDependencyMojoTest {
         mojo.execute();
 
         //Then
-        verify(pomEditor, atLeastOnce()).execute(addDependency.capture());
+        verify(pomEditor, atLeastOnce()).execute(targetPom.capture(),dependencyToBeAdded.capture());
         verify(backupFunction, atLeastOnce()).accept(any(), any());
         verify(rollbackFunction, never()).accept(any(), any());
         verify(log, atLeastOnce()).info(anyString());
 
-
-        var addDependency = this.addDependency.getValue();
-        assertThat(addDependency.pom).isEqualTo(Path.of(mojo.pom));
-        assertThat(addDependency.dependency.getGroupId()).isEqualTo(mojo.groupId);
-        assertThat(addDependency.dependency.getArtifactId()).isEqualTo(mojo.artifactId);
-        assertThat(addDependency.dependency.getVersion()).isEqualTo(mojo.version);
-        assertThat(addDependency.dependency.getType()).isEqualTo(mojo.type);
-        assertThat(addDependency.dependency.getClassifier()).isEqualTo(mojo.classifier);
-        assertThat(addDependency.dependency.getScope()).isEqualTo(mojo.scope);
+        var addDependency = this.dependencyToBeAdded.getValue();
+        assertThat(targetPom.getValue()).isEqualTo(Path.of(mojo.pom));
+        assertThat(addDependency.getGroupId()).isEqualTo(mojo.groupId);
+        assertThat(addDependency.getArtifactId()).isEqualTo(mojo.artifactId);
+        assertThat(addDependency.getVersion()).isEqualTo(mojo.version);
+        assertThat(addDependency.getType()).isEqualTo(mojo.type);
+        assertThat(addDependency.getClassifier()).isEqualTo(mojo.classifier);
+        assertThat(addDependency.getScope()).isEqualTo(mojo.scope);
 
     }
 
