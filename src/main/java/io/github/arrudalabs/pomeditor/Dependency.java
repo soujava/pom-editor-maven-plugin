@@ -16,7 +16,9 @@
 
 package io.github.arrudalabs.pomeditor;
 
+import java.util.Arrays;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 /**
  * Represents a dependency to be added
@@ -50,6 +52,21 @@ public final class Dependency {
         this.type = type;
         this.classifier = classifier;
         this.scope = scope;
+    }
+
+    public static DependencyBuilder ofGav(String gav) {
+        DependencyBuilder builder = new DependencyBuilder();
+        var gavValues = Arrays.stream(gav.split(":"))
+                .filter(Objects::nonNull)
+                .filter(item -> !item.isBlank())
+                .map(String::trim)
+                .collect(Collectors.toList());
+        builder.setGroupId(gavValues.get(0));
+        if (gavValues.size() >= 2)
+            builder.setArtifactId(gavValues.get(1));
+        if (gavValues.size() >= 3)
+            builder.setVersion(gavValues.get(2).trim());
+        return builder;
     }
 
 

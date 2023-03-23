@@ -18,6 +18,7 @@ package io.github.arrudalabs.pomeditor.it;
 
 import com.soebes.itf.jupiter.extension.MavenGoal;
 import com.soebes.itf.jupiter.extension.MavenJupiterExtension;
+import com.soebes.itf.jupiter.extension.MavenOption;
 import com.soebes.itf.jupiter.extension.MavenTest;
 import com.soebes.itf.jupiter.extension.SystemProperty;
 import com.soebes.itf.jupiter.maven.MavenExecutionResult;
@@ -45,14 +46,13 @@ import static com.soebes.itf.extension.assertj.MavenExecutionResultAssert.assert
 
 @MavenJupiterExtension
 @MavenGoal("${project.groupId}:${project.artifactId}:${project.version}:add-dep")
-@SystemProperty(value = "groupId", content = AddDependencyMojoIT.orgJunitJupiterGroupId)
-@SystemProperty(value = "artifactId", content = AddDependencyMojoIT.junitJupiterArtifactId)
-@SystemProperty(value = "version", content = AddDependencyMojoIT.version5_9_0)
+@SystemProperty(value = "gav", content = AddDependencyMojoIT.orgJunitJupiterGav)
 public class AddDependencyMojoIT {
 
     static final String orgJunitJupiterGroupId = "org.junit.jupiter";
     static final String junitJupiterArtifactId = "junit-jupiter";
     static final String version5_9_0 = "5.9.0";
+    static final String orgJunitJupiterGav = orgJunitJupiterGroupId + ":" + junitJupiterArtifactId + ":" + version5_9_0;
 
     @MavenTest
     @DisplayName("adding given a dependency into a POM without dependencies")

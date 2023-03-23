@@ -36,12 +36,8 @@ import java.util.function.BiConsumer;
 @Mojo(name = "add-dep")
 public class AddDependencyMojo extends AbstractMojo {
 
-    @Parameter(property = "groupId")
-    String groupId;
-    @Parameter(property = "artifactId")
-    String artifactId;
-    @Parameter(property = "version")
-    String version;
+    @Parameter(property = "gav")
+    String gav;
     @Parameter(property = "type")
     String type;
     @Parameter(property = "classifier")
@@ -60,22 +56,14 @@ public class AddDependencyMojo extends AbstractMojo {
 
     @Override
     public void execute() throws MojoExecutionException, MojoFailureException {
+
         Path pomFile = Paths.get(pom);
+        Dependency dependency = buildDependency();
         boolean doRollback = false;
         try {
-
             Optional.ofNullable(backupFunction)
                     .orElse(PomChangeTransaction::backup)
                     .accept(getLog(), pomFile);
-
-            var dependency = Dependency.builder()
-                    .setGroupId(groupId)
-                    .setArtifactId(artifactId)
-                    .setVersion(version)
-                    .setType(type)
-                    .setClassifier(classifier)
-                    .setScope(scope)
-                    .build();
 
             Optional.ofNullable(pomEditor)
                     .orElseGet(PomEditor::new)
@@ -91,6 +79,18 @@ public class AddDependencyMojo extends AbstractMojo {
                         .orElse(PomChangeTransaction::rollback)
                         .accept(getLog(), pomFile);
             }
+        }
+    }
+
+    private Dependency buildDependency() throws MojoExecutionException {
+        try {
+            return Dependency.ofGav(gav)
+                    .setType(type)
+                    .setClassifier(classifier)
+                    .setScope(scope)
+                    .build();
+        } catch (RuntimeException ex) {
+            throw new MojoExecutionException(ex);
         }
     }
 }

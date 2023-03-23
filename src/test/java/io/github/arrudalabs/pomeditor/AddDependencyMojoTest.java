@@ -33,7 +33,12 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.nio.file.Path;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
 import java.util.function.BiConsumer;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -73,13 +78,14 @@ class AddDependencyMojoTest {
             AddDependencyMojo mojo = new AddDependencyMojo();
             mojo.backupFunction = backupFunction;
             mojo.rollbackFunction = rollbackFunction;
-            mojo.groupId = groupId;
-            mojo.artifactId = artifactId;
+            mojo.gav = Arrays.stream(new String[]{groupId, artifactId})
+                    .filter(Objects::nonNull)
+                    .collect(Collectors.joining(":"));
             mojo.execute();
         });
 
-        verify(backupFunction, atLeastOnce()).accept(any(), any());
-        verify(rollbackFunction, atLeastOnce()).accept(any(), any());
+        verify(backupFunction, never()).accept(any(), any());
+        verify(rollbackFunction, never()).accept(any(), any());
     }
 
     static Stream<Arguments> invalidParameters() {
@@ -116,10 +122,12 @@ class AddDependencyMojoTest {
     void shouldAddDependencyProperly() throws MojoExecutionException, MojoFailureException {
 
         //Given
+        String expectedGroupId = "groupId";
+        String expectedArtifactId = "artifactId";
+        String expectedVersion = "222";
+
         AddDependencyMojo mojo = newMojo();
-        mojo.groupId = "groupId";
-        mojo.artifactId = "artifactId";
-        mojo.version = "222";
+        mojo.gav = expectedGroupId + ":" + expectedArtifactId + ":" + expectedVersion;
         mojo.type = "jar";
         mojo.classifier = "classified";
         mojo.scope = "compile";
@@ -130,16 +138,16 @@ class AddDependencyMojoTest {
         mojo.execute();
 
         //Then
-        verify(pomEditor, atLeastOnce()).execute(targetPom.capture(),dependencyToBeAdded.capture());
+        verify(pomEditor, atLeastOnce()).execute(targetPom.capture(), dependencyToBeAdded.capture());
         verify(backupFunction, atLeastOnce()).accept(any(), any());
         verify(rollbackFunction, never()).accept(any(), any());
         verify(log, atLeastOnce()).info(anyString());
 
         var addDependency = this.dependencyToBeAdded.getValue();
         assertThat(targetPom.getValue()).isEqualTo(Path.of(mojo.pom));
-        assertThat(addDependency.getGroupId()).isEqualTo(mojo.groupId);
-        assertThat(addDependency.getArtifactId()).isEqualTo(mojo.artifactId);
-        assertThat(addDependency.getVersion()).isEqualTo(mojo.version);
+        assertThat(addDependency.getGroupId()).isEqualTo(expectedGroupId);
+        assertThat(addDependency.getArtifactId()).isEqualTo(expectedArtifactId);
+        assertThat(addDependency.getVersion()).isEqualTo(expectedVersion);
         assertThat(addDependency.getType()).isEqualTo(mojo.type);
         assertThat(addDependency.getClassifier()).isEqualTo(mojo.classifier);
         assertThat(addDependency.getScope()).isEqualTo(mojo.scope);
