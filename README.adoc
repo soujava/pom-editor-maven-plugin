@@ -11,9 +11,6 @@ Let's suppose that you need to add JUnit Jupiter version 5.9.2 into your POM in 
 
 [source, sh]
 ----
-mvn io.github.arrudalabs:pom-editor:add-dep -DgroupId=org.junit.jupiter -DartifactId=junit-jupiter -Dversion=5.9.2 -Dscope=test
-
-
 mvn pom-editor:add-dep -Dgav='org.junit.jupiter:junit-jupiter:5.9.2' -Dscope=test
 ----
 
@@ -34,7 +31,7 @@ Then you'll be able to perform the plugin by its prefix:
 
 [source,sh]
 ----
-mvn pom-editor:add-dep -DgroupId=org.junit.jupiter -DartifactId=junit-jupiter -Dversion=5.9.2 -Dscope=test
+mvn pom-editor:add-dep -Dgav='org.junit.jupiter:junit-jupiter:5.9.2' -Dscope=test
 ----
 
 == Goals
