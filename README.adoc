@@ -44,4 +44,4 @@ It covers the following goals:
 
 == To know more with SouJava Community
 
-* Join the link=https://discord.gg/eAARnH7yrG[SouJava Discord server] and `#pom-editor-maven-plugin` channel
+* Join the link=https://discord.gg/eAARnH7yrG [SouJava Discord server] and `#pom-editor-maven-plugin` channel
