@@ -1,0 +1,23 @@
+= Changelog
+:toc: auto
+
+== [Unreleased]
+
+=== Added
+- Added CHANGELOG documentation;
+
+== [0.0.2] 2023-03-23T23:46:43Z
+
+=== Added
+- Added the property called `gav` into the `add-dep` goal in order to inform the target dependency following the GAV(`groupId:artifactId:version`) pattern
+
+=== Removed
+- Removed the properties: `groupId`, `artifactId`, `version` in favor to use the `gav` property
+
+== [0.0.1] - 2023-03-20T06:50:35Z
+
+=== Added
+
+- Added the `add-dep` maven goal in order to be able to add one dependency by time into a target POM
+- Added the `commit` maven goal in order to be able to confirm the changes into the target POM, removing the backup POM file;
+- Added the `rollback` maven goal in order to be able to revert the changes into the target POM;
