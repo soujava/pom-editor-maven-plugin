@@ -1,6 +1,12 @@
+
 = POM Editor Maven Plugin
 :toc: auto
 
+[%autowidth,cols="a,a", frame=none, grid=none, role="" ]
+|===
+| image:https://github.com/arrudalabs/pom-editor-maven-plugin/actions/workflows/java-11.yml/badge.svg[ link=https://github.com/arrudalabs/pom-editor-maven-plugin/actions/workflows/java-11.yml, window=_blank, target=_blank]
+| image:https://img.shields.io/maven-central/v/io.github.arrudalabs/pom-editor-maven-plugin?style=flat-square[Maven Central]
+|===
 == Introduction
 
 Facilitate manipulation such as managing POM dependencies through CLI (command line interface)
@@ -42,6 +48,14 @@ It covers the following goals:
 * Rollback/Commit changes at POM.xml
 
 
-== To know more with SouJava Community
+== Contributing
 
-* Join the https://discord.gg/eAARnH7yrG[SouJava Discord server] and `#pom-editor-maven-plugin` channel
+We are very happy you are interested in helping us and there are plenty ways you can do so.
+
+- https://github.com/arrudalabs/pom-editor-maven-plugin/issues[**Open an Issue:**]  Recommend improvements, changes and report bugs
+
+- **Open a Pull Request:** If you feel like you can even make changes to our source code and suggest them, just check out our link:CONTRIBUTING.adoc[contributing guide] to learn about the development process, how to suggest bugfixes and improvements.
+
+== Contact
+
+Join the link:https://discord.gg/eAARnH7yrG[SouJava Discord server] and say hello at `#pom-editor-maven-plugin` channel!
