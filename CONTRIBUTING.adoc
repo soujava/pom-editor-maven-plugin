@@ -22,9 +22,7 @@ Writing a good issue will help our team better analyze and manage your contribut
 
 **With the title:**
 
-**Project:Scope - Title Description**
-
-- **Project:** Name of the project or repository you want to contribute to.
+**Scope - Title Description**
 
 - **Scope:** Add what your issue refers to:
 
@@ -32,7 +30,7 @@ Writing a good issue will help our team better analyze and manage your contribut
 
 - **https://github.com/arrudalabs/pom-editor-maven-plugin/issues/new?assignees=&labels=&template=feature_request.md&title=[Feature request]:** Suggest a new idea for POM Editor Maven Plugin.
 
-> **Example: POM Editor Maven Plugin: feat request - Suggestion for a better user experience**
+> **Example: Feat request - Suggestion for a better user experience**
 
 **With the issue description:**
 
