@@ -421,13 +421,11 @@
                 <artifactId>apache-rat-plugin</artifactId>
                 <version>0.13</version>
                 <configuration>
-                    <excludes>
-                        <exclude>README*</exclude>
-                        <exclude>.github/**</exclude>
-                        <exclude>src/test/java/io/github/arrudalabs/it/**</exclude>
-                        <exclude>src/test/resources/**</exclude>
-                        <exclude>src/test/resources-its/**</exclude>
-                    </excludes>
+                    <includes>
+                        <include>src/**/*.java</include>
+                        <include>src/**/*.xml</include>
+                        <include>pom.xml</include>
+                    </includes>
                 </configuration>
                 <executions>
                     <execution>
