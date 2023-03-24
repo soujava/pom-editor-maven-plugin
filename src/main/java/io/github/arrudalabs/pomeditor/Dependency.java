@@ -61,11 +61,12 @@ public final class Dependency {
                 .filter(item -> !item.isBlank())
                 .map(String::trim)
                 .collect(Collectors.toList());
-        builder.setGroupId(gavValues.get(0));
+        if (gavValues.size() >= 1)
+            builder.setGroupId(gavValues.get(0));
         if (gavValues.size() >= 2)
             builder.setArtifactId(gavValues.get(1));
         if (gavValues.size() >= 3)
-            builder.setVersion(gavValues.get(2).trim());
+            builder.setVersion(gavValues.get(2));
         return builder;
     }
 
