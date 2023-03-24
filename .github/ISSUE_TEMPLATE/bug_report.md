@@ -1,38 +1,27 @@
 ---
-name: Bug report
-about: Create a report to help us improve
+name: "🐛 Bug Report"
+about: Report a reproducible bug.
 title: ''
-labels: ''
-assignees: ''
+labels: 'bug'
 
 ---
 
-**Describe the bug**
-A clear and concise description of what the bug is.
+Please provide all the information requested. Issues that do not follow this format are likely to stall.
 
-**To Reproduce**
-Steps to reproduce the behavior:
-1. Go to '...'
-2. Click on '....'
-3. Scroll down to '....'
-4. See error
+## Description
+Please provide a clear and concise description of what the bug is. Include screenshots if needed.
+Please test using the latest Beagle release to make sure your issue has not already been fixed: https://github.com/arrudalabs/pom-editor-maven-plugin/releases
 
-**Expected behavior**
-A clear and concise description of what you expected to happen.
+## Steps To Reproduce
+Provide a detailed list of steps that reproduce the issue.
 
-**Screenshots**
-If applicable, add screenshots to help explain your problem.
+1.
+2.
 
-**Desktop (please complete the following information):**
- - OS: [e.g. iOS]
- - Browser [e.g. chrome, safari]
- - Version [e.g. 22]
+## Expected Results
+Describe what you expected to happen.
 
-**Smartphone (please complete the following information):**
- - Device: [e.g. iPhone6]
- - OS: [e.g. iOS8.1]
- - Browser [e.g. stock browser, safari]
- - Version [e.g. 22]
-
-**Additional context**
-Add any other context about the problem here.
+## Code example, screenshot, or link to a repository:
+Please provide a link to a repository on GitHub, or provide a minimal code example that reproduces the problem.
+You may provide a screenshot of the application if you think it is relevant to your bug report.
+Here are some tips for providing a minimal example: https://stackoverflow.com/help/mcve
