@@ -9,6 +9,17 @@ and this project adheres to https://semver.org/spec/v2.0.0.html[Semantic Version
 == [Unreleased]
 
 === Added
+- ?
+
+=== Changes
+- ?
+
+=== Fixes
+- ?
+
+== [0.0.3]
+
+=== Added
 - Added CHANGELOG documentation;
 - Added CONTRIBUTING guide;
 - Added issues templates;
