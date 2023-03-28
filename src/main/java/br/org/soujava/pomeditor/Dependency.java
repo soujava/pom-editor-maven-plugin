@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package io.github.arrudalabs.pomeditor;
+package br.org.soujava.pomeditor;
 
 import java.util.Arrays;
 import java.util.Objects;

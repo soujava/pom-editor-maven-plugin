@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package io.github.arrudalabs.pomeditor;
+package br.org.soujava.pomeditor;
 
 import org.apache.maven.plugin.logging.Log;
 import org.junit.jupiter.api.AfterEach;

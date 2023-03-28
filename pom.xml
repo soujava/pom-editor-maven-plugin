@@ -18,20 +18,20 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>io.github.arrudalabs</groupId>
+    <groupId>br.org.soujava</groupId>
     <artifactId>pom-editor-maven-plugin</artifactId>
     <version>0.0.3-SNAPSHOT</version>
     <packaging>maven-plugin</packaging>
 
     <organization>
-        <name>ArrudaLabs</name>
-        <url>https://github.com/arrudalabs</url>
+        <name>SouJava</name>
+        <url>https://soujava.org.br</url>
     </organization>
 
     <scm>
         <connection>scm:git:${project.scm.url}</connection>
         <developerConnection>scm:git:${project.scm.url}</developerConnection>
-        <url>https://github.com/arrudalabs/pom-editor-maven-plugin.git</url><!-- it's required by release processes -->
+        <url>https://github.com/soujava/pom-editor-maven-plugin.git</url><!-- it's required by release processes -->
         <tag>HEAD</tag>
     </scm>
 
@@ -45,7 +45,7 @@
     <name>POM Editor Maven Plugin</name>
     <description>It's a Maven Plugin to allowing POM editions</description>
 
-    <url>https://arrudalabs.github.io/pom-editor-maven-plugin</url>
+    <url>https://soujava.github.io/pom-editor-maven-plugin</url>
 
     <licenses>
         <license>
@@ -656,7 +656,7 @@
     <distributionManagement>
         <site>
             <id>github</id>
-            <url>scm:git:ssh://git@github.com/arrudalabs/pom-editor-maven-plugin.git</url>
+            <url>scm:git:ssh://git@github.com/soujava/pom-editor-maven-plugin.git</url>
         </site>
         <snapshotRepository>
             <id>ossrh</id>

@@ -14,34 +14,34 @@
  * limitations under the License.
  */
 
-package io.github.arrudalabs.pomeditor;
+package br.org.soujava.pomeditor;
 
-import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
 import org.apache.maven.plugin.logging.Log;
-import org.apache.maven.plugins.annotations.Mojo;
-import org.apache.maven.plugins.annotations.Parameter;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.nio.file.Path;
-import java.util.Optional;
 import java.util.function.BiConsumer;
 
-/**
- * Restore the target POM file with the backup POM file
- */
-@Mojo(name = "rollback")
-public class RollbackMojo extends AbstractMojo {
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.atLeastOnce;
+import static org.mockito.Mockito.verify;
 
-    @Parameter(property = "pom", defaultValue = "pom.xml")
-    String pom = "pom.xml";
+@ExtendWith(MockitoExtension.class)
+class CommitMojoTest {
 
-    BiConsumer<Log, Path> rollbackFunction;
+    @Mock
+    BiConsumer<Log, Path> commitFunction;
 
-    @Override
-    public void execute() throws MojoExecutionException, MojoFailureException {
-        Optional.ofNullable(rollbackFunction)
-                .orElse(PomChangeTransaction::rollback)
-                .accept(getLog(), Path.of(pom));
+    @Test
+    void execute() throws MojoExecutionException, MojoFailureException {
+        var mojo = new CommitMojo();
+        mojo.commitFunction = this.commitFunction;
+        mojo.execute();
+        verify(commitFunction, atLeastOnce()).accept(any(Log.class), any(Path.class));
     }
 }
