@@ -14,35 +14,42 @@
  * limitations under the License.
  */
 
-package io.github.arrudalabs.pomeditor;
+package br.org.soujava.pomeditor;
 
-import org.apache.maven.plugin.MojoExecutionException;
-import org.apache.maven.plugin.MojoFailureException;
 import org.apache.maven.plugin.logging.Log;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.ArgumentCaptor;
+import org.mockito.Captor;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.nio.file.Path;
-import java.util.function.BiConsumer;
-
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.any;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.atLeastOnce;
 import static org.mockito.Mockito.verify;
 
 @ExtendWith(MockitoExtension.class)
-class RollbackMojoTest {
+class GreetingMojoTest {
 
     @Mock
-    BiConsumer<Log, Path> rollbackFunction;
+    Log logger;
+
+    @Captor
+    ArgumentCaptor<String> output;
 
     @Test
-    void execute() throws MojoExecutionException, MojoFailureException {
-        var mojo = new RollbackMojo();
-        mojo.rollbackFunction = this.rollbackFunction;
+    void shouldExecuteWithNoErrors() {
+        GreetingMojo mojo = newMojo();
+        mojo.username = "Max";
         mojo.execute();
-        verify(rollbackFunction, atLeastOnce()).accept(any(Log.class), any(Path.class));
+        verify(logger, atLeastOnce()).info(output.capture());
+        assertEquals("Hi, Max!", output.getValue());
     }
+
+    private GreetingMojo newMojo() {
+        GreetingMojo mojo = new GreetingMojo();
+        mojo.setLog(logger);
+        return mojo;
+    }
+
 }

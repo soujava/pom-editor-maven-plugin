@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package io.github.arrudalabs.pomeditor;
+package br.org.soujava.pomeditor;
 
 /**
  * Builder for Dependency

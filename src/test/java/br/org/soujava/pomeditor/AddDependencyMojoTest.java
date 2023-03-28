@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package io.github.arrudalabs.pomeditor;
+package br.org.soujava.pomeditor;
 
 
 import org.apache.maven.plugin.MojoExecutionException;
@@ -34,9 +34,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.nio.file.Path;
 import java.util.Arrays;
-import java.util.List;
 import java.util.Objects;
-import java.util.Optional;
 import java.util.function.BiConsumer;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package io.github.arrudalabs.pomeditor;
+package br.org.soujava.pomeditor;
 
 import org.l2x6.pom.tuner.PomTransformer;
 import org.l2x6.pom.tuner.model.Gavtcs;

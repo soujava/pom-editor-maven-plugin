@@ -14,27 +14,13 @@
  * limitations under the License.
  */
 
-package io.github.arrudalabs.pomeditor.it;
+package br.org.soujava.pomeditor.it;
 
 import com.soebes.itf.jupiter.extension.MavenGoal;
 import com.soebes.itf.jupiter.extension.MavenJupiterExtension;
-import com.soebes.itf.jupiter.extension.MavenTest;
-import com.soebes.itf.jupiter.extension.SystemProperty;
-import com.soebes.itf.jupiter.maven.MavenExecutionResult;
-
-import static com.soebes.itf.extension.assertj.MavenITAssertions.assertThat;
 
 @MavenJupiterExtension
-class GreetingMojoIT {
-
-    @MavenTest
-    @MavenGoal("${project.groupId}:${project.artifactId}:${project.version}:hello")
-    @SystemProperty(value = "username", content = "Max")
-    void hello(MavenExecutionResult result) {
-        assertThat(result)
-                .isSuccessful()
-                .out()
-                .info().contains("Hi, Max!");
-    }
+@MavenGoal("${project.groupId}:${project.artifactId}:${project.version}:commit")
+class CommitMojoIT {
 
 }
