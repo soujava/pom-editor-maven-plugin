@@ -18,7 +18,7 @@ and this project adheres to https://semver.org/spec/v2.0.0.html[Semantic Version
 - Moved project from ArrudaLabs to SouJava
 
 
-== [0.0.3-SNAPSHOT]
+== [0.0.3-SNAPSHOT] 2023-03-28T04:33:13Z
 
 === Added
 - Added CHANGELOG documentation;
