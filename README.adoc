@@ -4,8 +4,8 @@
 
 [%autowidth,cols="a,a", frame=none, grid=none, role="" ]
 |===
-| image:https://github.com/arrudalabs/pom-editor-maven-plugin/actions/workflows/java-11.yml/badge.svg[ link=https://github.com/arrudalabs/pom-editor-maven-plugin/actions/workflows/java-11.yml, window=_blank, target=_blank]
-| image:https://img.shields.io/maven-central/v/io.github.arrudalabs/pom-editor-maven-plugin?style=flat-square[Maven Central, link=https://central.sonatype.com/search?smo=true&q=io.github.arrudalabs&sort=published, window=_blank, target=_blank]
+| image:https://github.com/soujava/pom-editor-maven-plugin/actions/workflows/java-11.yml/badge.svg[ link=https://github.com/soujava/pom-editor-maven-plugin/actions/workflows/java-11.yml, window=_blank, target=_blank]
+| image:https://img.shields.io/maven-central/v/br.org.soujava/pom-editor-maven-plugin?style=flat-square[Maven Central, link=https://central.sonatype.com/search?smo=true&q=br.org.soujava&sort=published, window=_blank, target=_blank]
 |===
 == Introduction
 
@@ -17,7 +17,7 @@ Let's suppose that you need to add JUnit Jupiter version 5.9.2 into your POM in 
 
 [source, sh]
 ----
-mvn io.github.arrudalabs:pom-editor:add-dep -Dgav='org.junit.jupiter:junit-jupiter:5.9.2' -Dscope=test
+mvn br.org.soujava:pom-editor:add-dep -Dgav='org.junit.jupiter:junit-jupiter:5.9.2' -Dscope=test
 ----
 
 It's a Maven plugin then you may register the groupId into your `settings.xml` pluginGroups node :
@@ -27,7 +27,7 @@ It's a Maven plugin then you may register the groupId into your `settings.xml` p
 <settings >
     <!-- snipped -->
     <pluginGroups>
-      <pluginGroup>io.github.arrudalabs</pluginGroup>
+      <pluginGroup>br.org.soujava</pluginGroup>
     </pluginGroups>
     <!-- snipped -->
 </settings>
