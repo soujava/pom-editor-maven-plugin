@@ -20,7 +20,7 @@
 
     <groupId>br.org.soujava</groupId>
     <artifactId>pom-editor-maven-plugin</artifactId>
-    <version>0.0.3-SNAPSHOT</version>
+    <version>0.0.3</version>
     <packaging>maven-plugin</packaging>
 
     <organization>
@@ -32,7 +32,7 @@
         <connection>scm:git:${project.scm.url}</connection>
         <developerConnection>scm:git:${project.scm.url}</developerConnection>
         <url>https://github.com/soujava/pom-editor-maven-plugin.git</url><!-- it's required by release processes -->
-        <tag>HEAD</tag>
+        <tag>0.0.3</tag>
     </scm>
 
     <developers>
