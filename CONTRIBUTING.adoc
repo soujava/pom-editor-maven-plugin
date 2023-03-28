@@ -1,4 +1,5 @@
 = Contributing to POM Editor Maven Plugin
+:toc: auto
 
 We are very happy you are interested in helping us and there are plenty ways you can do so. Thanks for your interest in this project.
 
@@ -7,6 +8,56 @@ We are very happy you are interested in helping us and there are plenty ways you
 Join the SouJava Discord server and say hello at `#pom-editor-maven-plugin` channel.
 
 * https://discord.gg/eAARnH7yrG
+
+== Legal
+
+This project is licensed over link:https://github.com/soujava/pom-editor-maven-plugin/blob/main/LICENSE[**ASF - Apache License**], version 2, so new files must have the ASF version 2 header. For more information, please check out link:https://www.apache.org/licenses/LICENSE-2.0[**Apache license**];
+
+== Developer Certificate of Origin - DCO
+
+One of the requisites to contributing to this project is to add DCO to your commits.
+
+This is a security layer for the project and for the developers. It is mandatory.
+
+Follow one of these two methods to add DCO to your commits:
+
+=== Command line
+
+Follow the steps:
+
+- **Step 1:** Configure your local git environment adding the same name and e-mail configured at your GitHub account. It helps to sign commits manually during reviews and suggestions.
+
+[source, sh]
+----
+git config --global user.name “Name”
+git config --global user.email “email@domain.com.br”
+----
+
+- **Step 2:** Add the Signed-off-by line with the `-s` flag in the git commit command:
+
+[source, sh]
+----
+$ git commit -s -m "This is my commit message"
+----
+or
+[source, sh]
+----
+$ git commit -sm "This is my commit message"
+----
+
+=== GitHub website
+
+You can also manually sign your commits during GitHub reviews and suggestions, follow the steps below:
+
+1.  **Step 1:** When the commit changes box opens, manually type or paste your signature in the comment box, see the example:
+
+[source, text]
+----
+Signed-off-by: Name < e-mail address >
+----
+
+For this method, your name and e-mail must be the same registered on your GitHub account.
+
 
 == Issues
 
