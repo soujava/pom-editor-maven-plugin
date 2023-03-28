@@ -5,7 +5,7 @@
 [%autowidth,cols="a,a", frame=none, grid=none, role="" ]
 |===
 | image:https://github.com/soujava/pom-editor-maven-plugin/actions/workflows/java-11.yml/badge.svg[ link=https://github.com/soujava/pom-editor-maven-plugin/actions/workflows/java-11.yml, window=_blank, target=_blank]
-| image:https://img.shields.io/maven-central/v/br.org.soujava/pom-editor-maven-plugin?style=flat-square[Maven Central, link=https://central.sonatype.com/search?smo=true&q=br.org.soujava&sort=published, window=_blank, target=_blank]
+| image:https://img.shields.io/maven-central/v/br.org.soujava/pom-editor-maven-plugin?style=flat-square[Maven Central, link=https://central.sonatype.com/search?smo=true&namespace=br.org.soujava&q=br.org.soujava, window=_blank, target=_blank]
 |===
 == Introduction
 
