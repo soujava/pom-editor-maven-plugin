@@ -1,0 +1,63 @@
+name: 🐛 Bug Report
+description: Report a reproducible bug
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Please provide all the information requested. Issues that do not follow this format are likely to stall.
+        
+        Please test using the latest POM Editor Maven Plugin release to make sure your issue has not already been fixed: https://github.com/soujava/pom-editor-maven-plugin/releases 
+  - type: textarea
+    id: description
+    attributes:
+      label: Description
+      description: |
+        Please provide a clear and concise description of what the bug is. 
+        Include screenshots if needed.
+    validations:
+      required: true
+  - type: textarea
+    id: evidences
+    attributes:
+      label: Evidences
+      description: |
+        Please, provide a link to a repository on GitHub, or provide a minimal code example that reproduces the problem.
+        You may provide a screenshot of the application if you think it is relevant to your bug report.
+        Here are some tips for providing a minimal example: https://stackoverflow.com/help/mcve
+    validations:
+      required: true
+      
+  - type: textarea
+    id: steps-to-produce
+    attributes:
+      label: Steps To Reproduce
+      description: |
+        Please, provide a detailed list of steps that reproduce the issue.
+    validations:
+      required: true
+      
+  - type: textarea
+    id: expected-results
+    attributes:
+      label: Expected Results
+      description: |
+        Describe what you expected to happen.
+    validations:
+      required: false
+      
+  - type: textarea
+    id: solution-ideas
+    attributes:
+      label: Any idea for solving this issue?
+      description: |
+        Please, share with us your ideas for solving this issue if you have any.
+    validations:
+      required: false   
+      
+  - type: markdown
+    attributes:
+      value: |
+        ### Code of Conduct
+        By submitting this issue, you agree to follow our [Code of Conduct](https://github.com/soujava/pom-editor-maven-plugin/blob/main/CODE_OF_CONDUCT.adoc)
+     
