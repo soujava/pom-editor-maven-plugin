@@ -18,9 +18,40 @@ package br.org.soujava.pomeditor.it;
 
 import com.soebes.itf.jupiter.extension.MavenGoal;
 import com.soebes.itf.jupiter.extension.MavenJupiterExtension;
+import com.soebes.itf.jupiter.extension.MavenTest;
+import com.soebes.itf.jupiter.maven.MavenExecutionResult;
+import com.soebes.itf.jupiter.maven.MavenProjectResult;
+import org.assertj.core.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+
+import java.nio.file.Path;
+import java.nio.file.Paths;
+
+import static br.org.soujava.pomeditor.CheckSum.checksum;
+import static com.soebes.itf.extension.assertj.MavenExecutionResultAssert.assertThat;
 
 @MavenJupiterExtension
 @MavenGoal("${project.groupId}:${project.artifactId}:${project.version}:commit")
 class CommitMojoIT {
 
+    String expectedChecksum;
+
+    @BeforeEach
+    void beforeEach(MavenProjectResult project) throws Exception {
+        Path pom = project.getTargetProjectDirectory().resolve("pom.xml");
+        expectedChecksum = checksum(pom);
+    }
+
+
+    @MavenTest
+    @DisplayName("committing the changes - it will remove the backup file")
+    void project_with_backup(MavenExecutionResult result) throws Exception {
+        assertThat(result).isSuccessful();
+        Path baseDirectory = result.getMavenProjectResult().getTargetProjectDirectory();
+        Path pom = Path.of(baseDirectory.toString(), "pom.xml");
+        Path backupPom = Paths.get(baseDirectory.toString(), "pom.xml.backup");
+        Assertions.assertThat(backupPom).doesNotExist();
+        Assertions.assertThat(checksum(pom)).isEqualTo(expectedChecksum);
+    }
 }
