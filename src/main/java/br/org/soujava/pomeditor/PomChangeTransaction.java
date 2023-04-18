@@ -23,34 +23,21 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
 import java.util.Objects;
+import java.util.Optional;
+import java.util.function.BiConsumer;
+import java.util.function.BiFunction;
 
 /**
  * Interface that provides functions for the pom change transactions
  */
-interface PomChangeTransaction {
+public class PomChangeTransaction {
 
-    static Path backupFileOf(Path pom) {
+    public static Path backupFileOf(Path pom) {
         Objects.requireNonNull(pom, "pom cannot be null");
         return Path.of(pom.toString() + ".backup");
     }
 
-    static void backup(Log log, Path pom) {
-        Objects.requireNonNull(log, "log cannot be null");
-        Objects.requireNonNull(pom, "pom cannot be null");
-        Path backupFile = backupFileOf(pom);
-        if (!backupFile.toFile().exists()) {
-            try {
-                Files.copy(pom, backupFile);
-                log.info(String.format("Backup for '%s' created: '%s'",
-                        pom.toAbsolutePath(),
-                        backupFile.toAbsolutePath()));
-            } catch (IOException e) {
-                throw new RuntimeException("failure during backup process:" + e.getMessage(), e);
-            }
-        }
-    }
-
-    static void rollback(Log log, Path pom) {
+    public static void rollback(Log log, Path pom) {
         Objects.requireNonNull(log, "log cannot be null");
         Objects.requireNonNull(pom, "pom cannot be null");
         Path backupFile = backupFileOf(pom);
@@ -66,7 +53,7 @@ interface PomChangeTransaction {
         }
     }
 
-    static void commit(Log log, Path pom) {
+    public static void commit(Log log, Path pom) {
         Objects.requireNonNull(log, "log cannot be null");
         Objects.requireNonNull(pom, "pom cannot be null");
         Path backupFile = backupFileOf(pom);
@@ -76,4 +63,106 @@ interface PomChangeTransaction {
             log.info("backup file was deleted");
         }
     }
+
+    private final Log log;
+    private final Path pom;
+    private final BiFunction<Log, Path, Boolean> backupFunction;
+    private final BiConsumer<Log, Path> rollbackFunction;
+
+    private PomChangeTransaction(Log log,
+                                 Path pom,
+                                 BiFunction<Log, Path, Boolean> backupFunction,
+                                 BiConsumer<Log, Path> rollbackFunction) {
+        this.log = log;
+        this.pom = pom;
+        this.backupFunction = Optional.ofNullable(backupFunction).orElse(this::backup);
+        this.rollbackFunction = Optional.ofNullable(rollbackFunction).orElse(PomChangeTransaction::rollback);
+    }
+
+    public static PomChangeTransactionBuilder builder() {
+        return new PomChangeTransactionBuilder();
+    }
+
+    static class PomChangeTransactionBuilder {
+
+        private Log log;
+        private Path pom;
+        private BiFunction<Log, Path, Boolean> backupFunction;
+        private BiConsumer<Log, Path> rollbackFunction;
+
+        public PomChangeTransactionBuilder withLog(Log log) {
+            this.log = log;
+            return this;
+        }
+
+        public PomChangeTransactionBuilder withPom(Path pom) {
+            this.pom = pom;
+            return this;
+        }
+
+        public PomChangeTransactionBuilder withBackupFunction(BiFunction<Log, Path, Boolean> backupFunction) {
+            this.backupFunction = backupFunction;
+            return this;
+        }
+
+
+        public PomChangeTransactionBuilder withRollbackFunction(BiConsumer<Log, Path> rollbackFunction) {
+            this.rollbackFunction = rollbackFunction;
+            return this;
+        }
+
+        public PomChangeTransaction build() {
+            return new PomChangeTransaction(this.log, this.pom, this.backupFunction, this.rollbackFunction);
+        }
+
+    }
+
+    @FunctionalInterface
+    public static interface Executable {
+        void execute() throws Throwable;
+    }
+
+    public void execute(Executable executable) throws Throwable {
+        boolean createdBackupFile = false;
+        try {
+            createdBackupFile = createBackupFileIfNeeded();
+            executable.execute();
+        } catch (Throwable ex) {
+            rollback(createdBackupFile);
+            throw ex;
+        }
+    }
+
+    private boolean createBackupFileIfNeeded() {
+        return Optional.ofNullable(
+                        Optional.ofNullable(this.backupFunction).orElse(this::backup).apply(this.log, this.pom))
+                .orElse(Boolean.FALSE);
+    }
+
+    private void rollback(boolean isBackupOwner) {
+        if (isBackupOwner) {
+            Optional.ofNullable(this.rollbackFunction)
+                    .orElse(PomChangeTransaction::rollback)
+                    .accept(this.log, this.pom);
+        }
+    }
+
+    private Boolean backup(Log log, Path pom) {
+        Objects.requireNonNull(log, "log cannot be null");
+        Objects.requireNonNull(pom, "pom cannot be null");
+        Path backupFile = backupFileOf(pom);
+        if (!backupFile.toFile().exists()) {
+            try {
+                Files.copy(pom, backupFile);
+                log.info(String.format("Backup for '%s' created: '%s'",
+                        pom.toAbsolutePath(),
+                        backupFile.toAbsolutePath()));
+                return true;
+            } catch (IOException e) {
+                throw new RuntimeException("failure during backup process:" + e.getMessage(), e);
+            }
+        }
+        return false;
+    }
+
 }

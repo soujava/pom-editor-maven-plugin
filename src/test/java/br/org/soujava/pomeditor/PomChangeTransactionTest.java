@@ -19,6 +19,7 @@ package br.org.soujava.pomeditor;
 import org.apache.maven.plugin.logging.Log;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
 import java.io.File;
@@ -36,38 +37,118 @@ import java.util.UUID;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.atLeastOnce;
 import static org.mockito.Mockito.atMost;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
+
+import static br.org.soujava.pomeditor.CheckSum.checksum;
 
 class PomChangeTransactionTest {
 
-    @Test
-    void shouldCreateBackup() throws IOException, NoSuchAlgorithmException {
+    @Nested
+    class WhenBackFileDoesNotExists {
 
-        var log = mock(Log.class);
+        Path backupPom;
 
-        Path pom = newDummyPom();
-        Path backupFile = PomChangeTransaction.backupFileOf(pom);
+        @BeforeEach
+        void setup() throws IOException {
+            createTempDirAndPom();
+            this.backupPom = PomChangeTransaction.backupFileOf(pom);
+            if (this.backupPom.toFile().exists())
+                this.backupPom.toFile().delete();
+        }
 
-        PomChangeTransaction.backup(log, pom);
-        verify(log, atLeastOnce()).info(anyString());
+        @Test
+        void shouldCreateBackup() throws Throwable {
+            var expectedCheckSum = checksum(pom);
 
-        String expectedChecksum = checksum(pom);
-        String actualChecksum = checksum(backupFile);
+            getPomChangeTransactionBuilder().build()
+                    .execute(() -> {
+                        // do something here
+                    });
 
-        assertEquals(expectedChecksum, actualChecksum);
+            verify(log, atLeastOnce()).info(anyString());
+            assertTrue(backupPom.toFile().exists());
+            assertEquals(expectedCheckSum, checksum(backupPom));
+        }
+
+        @Test
+        void shouldRollbackOnErrors() throws IOException, NoSuchAlgorithmException {
+            var expectedCheckSum = checksum(pom);
+
+            assertThrows(Throwable.class, () -> {
+                getPomChangeTransactionBuilder()
+                        .build().execute(() -> {
+                            modifyPomRandomly();
+                            throw new RuntimeException("forced error");
+                        });
+            });
+
+            verify(log, atLeastOnce()).info(anyString());
+            assertFalse(backupPom.toFile().exists());
+            assertEquals(expectedCheckSum, checksum(pom));
+        }
+    }
+
+
+    @Nested
+    class WhenBackFileAlreadyExists {
+
+        Path backupPom;
+
+        @BeforeEach
+        void setup() throws IOException {
+            createTempDirAndPom();
+            backupPom = newDummyBackup(pom);
+        }
+
+        @Test
+        void shouldNotCreateBackup() throws Throwable {
+
+            var expectedCheckSum = checksum(backupPom);
+
+            getPomChangeTransactionBuilder()
+                    .build()
+                    .execute(() -> {
+                        modifyPomRandomly();
+                    });
+
+            verify(log, never()).info(anyString());
+            assertNotEquals(checksum(pom), checksum(backupPom));
+            assertEquals(expectedCheckSum, checksum(backupPom));
+        }
+
+        @Test
+        void shouldNotRollbackOnErrors() throws IOException, NoSuchAlgorithmException {
+            var expectedCheckSum = checksum(pom);
+
+            assertThrows(Throwable.class, () -> {
+                getPomChangeTransactionBuilder()
+                        .build().execute(() -> {
+                            modifyPomRandomly();
+                            throw new RuntimeException("forced error");
+                        });
+            });
+
+            verify(log, never()).info(anyString());
+            assertTrue(backupPom.toFile().exists());
+            assertNotEquals(expectedCheckSum, checksum(pom));
+        }
 
     }
+
+    private Log log;
+    private Path pom;
 
     @Test
     void shouldCommit() throws IOException, NoSuchAlgorithmException {
 
-        var log = mock(Log.class);
-        Path pom = newDummyPom();
+
         Path backup = newDummyBackup(pom);
 
         String expectedCheckSum = checksum(pom);
@@ -103,6 +184,22 @@ class PomChangeTransactionTest {
 
     }
 
+    private PomChangeTransaction.PomChangeTransactionBuilder getPomChangeTransactionBuilder() {
+        return PomChangeTransaction.builder()
+                .withLog(log)
+                .withPom(pom);
+    }
+
+    // utility methods
+
+    private void modifyPomRandomly() throws IOException {
+        modifyPom(UUID.randomUUID().toString());
+    }
+
+    private void modifyPom(String data) throws IOException {
+        Files.writeString(pom, data, StandardOpenOption.TRUNCATE_EXISTING);
+    }
+
     private Path newDummyPom() throws IOException {
         Path pom = Files.createTempFile(tempDir, "pom", ".xml");
         Files.writeString(pom, UUID.randomUUID().toString(), StandardOpenOption.TRUNCATE_EXISTING, StandardOpenOption.WRITE);
@@ -115,25 +212,20 @@ class PomChangeTransactionTest {
         return backupFile;
     }
 
-
     protected Path tempDir;
 
     @BeforeEach
-    void before() throws IOException {
-        tempDir = Files.createTempDirectory(null);
+    void createTempDirAndPom() throws IOException {
+        this.tempDir = Files.createTempDirectory(null);
+        this.log = mock(Log.class);
+        this.pom = newDummyPom();
     }
 
     @AfterEach
-    void after() {
+    void destroyTempDir() {
         Optional.ofNullable(tempDir).ifPresent(tempDir -> delete(tempDir.toFile()));
     }
 
-    String checksum(Path file) throws IOException, NoSuchAlgorithmException {
-        byte[] data = Files.readAllBytes(file);
-        byte[] hash = MessageDigest.getInstance("MD5").digest(data);
-        String checksum = new BigInteger(1, hash).toString(16);
-        return checksum;
-    }
 
     void delete(File file) {
         if (file.isDirectory()) {
