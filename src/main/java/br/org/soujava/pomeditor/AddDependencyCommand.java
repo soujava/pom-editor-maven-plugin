@@ -27,15 +27,17 @@ import java.util.function.BiConsumer;
 import java.util.stream.Collectors;
 
 /**
- * The POM editor instance
+ * Command responsible for adding a dependency to a given pom
  */
-class PomEditor {
+interface AddDependencyCommand {
+
+
     /**
      * Add a dependency informed by the {@link Dependency} instance into the target POM xml
      * @param pom it's the target POM xml
      * @param dependency it's an {@link Dependency} instance
      */
-    void execute(Path pom, Dependency dependency) {
+    static void execute(Path pom, Dependency dependency) {
         new PomTransformer(
                 pom,
                 StandardCharsets.UTF_8,
@@ -43,7 +45,7 @@ class PomEditor {
                 .transform(addOrUpdateDependencyIfNeeded(dependency));
     }
 
-    private PomTransformer.Transformation addOrUpdateDependencyIfNeeded(Dependency dependencyToBeAdded) {
+    private static PomTransformer.Transformation addOrUpdateDependencyIfNeeded(Dependency dependencyToBeAdded) {
         return (document, context) -> {
 
             Gavtcs dependency = toGavtcs(dependencyToBeAdded);

@@ -27,6 +27,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Optional;
 import java.util.function.BiConsumer;
+import java.util.function.BiFunction;
 
 /**
  * Mojo responsible to add a given dependency to a target POM
@@ -47,9 +48,9 @@ public class AddDependencyMojo extends AbstractMojo {
     @Parameter(property = "pom", defaultValue = "pom.xml")
     String pom = "pom.xml";
 
-    PomEditor pomEditor;
+    BiConsumer<Path, Dependency> addDependencyCommand;
 
-    BiConsumer<Log, Path> backupFunction;
+    BiFunction<Log, Path, Boolean> backupFunction;
 
     BiConsumer<Log, Path> rollbackFunction;
 
@@ -59,38 +60,44 @@ public class AddDependencyMojo extends AbstractMojo {
 
         Path pomFile = Paths.get(pom);
         Dependency dependency = buildDependency();
-        boolean doRollback = false;
         try {
-            Optional.ofNullable(backupFunction)
-                    .orElse(PomChangeTransaction::backup)
-                    .accept(getLog(), pomFile);
-
-            Optional.ofNullable(pomEditor)
-                    .orElseGet(PomEditor::new)
-                    .execute(pomFile, dependency);
-
-            getLog().info(String.format("added the dependency: %s to the pom: %s ", dependency, pomFile));
-        } catch (RuntimeException ex) {
-            doRollback = true;
-            throw new MojoExecutionException(ex);
-        } finally {
-            if (doRollback) {
-                Optional.ofNullable(rollbackFunction)
-                        .orElse(PomChangeTransaction::rollback)
-                        .accept(getLog(), pomFile);
-            }
+            buildTransaction(pomFile)
+                    .execute(() -> Optional
+                            .ofNullable(this.addDependencyCommand)
+                            .orElse(AddDependencyCommand::execute)
+                            .andThen(this::onSuccess)
+                            .accept(pomFile, dependency));
+        } catch (Throwable ex) {
+            throw new MojoExecutionException(ex.getMessage(),ex);
         }
+    }
+
+    private void onSuccess(Path changedPom, Dependency addedDependency) {
+        getLog().info(String.format("added the dependency: %s to the pom: %s ", addedDependency, changedPom));
+    }
+
+    private PomChangeTransaction buildTransaction(Path pomFile) {
+        return PomChangeTransaction
+                .builder()
+                .withLog(getLog())
+                .withPom(pomFile)
+                .withBackupFunction(backupFunction)
+                .withRollbackFunction(rollbackFunction)
+                .build();
     }
 
     private Dependency buildDependency() throws MojoExecutionException {
         try {
-            return Dependency.ofGav(gav)
+            return Dependency
+                    .ofGav(gav)
                     .setType(type)
                     .setClassifier(classifier)
                     .setScope(scope)
                     .build();
         } catch (RuntimeException ex) {
-            throw new MojoExecutionException(ex);
+            throw new MojoExecutionException(ex.getMessage(),ex);
         }
     }
+
+
 }

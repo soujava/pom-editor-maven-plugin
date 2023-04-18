@@ -20,7 +20,9 @@ package br.org.soujava.pomeditor;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
 import org.apache.maven.plugin.logging.Log;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -32,10 +34,16 @@ import org.mockito.Captor;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.StandardCopyOption;
 import java.util.Arrays;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.function.BiConsumer;
+import java.util.function.BiFunction;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -44,6 +52,7 @@ import static org.junit.jupiter.params.provider.Arguments.arguments;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.atLeastOnce;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 
@@ -51,13 +60,13 @@ import static org.mockito.Mockito.verify;
 class AddDependencyMojoTest {
 
     @Mock
-    PomEditor pomEditor;
+    BiConsumer<Path, Dependency> addDependencyCommand;
 
     @Mock
     Log log;
 
     @Mock
-    BiConsumer<Log, Path> backupFunction;
+    BiFunction<Log, Path, Boolean> backupFunction;
 
     @Mock
     BiConsumer<Log, Path> rollbackFunction;
@@ -67,22 +76,23 @@ class AddDependencyMojoTest {
     @Captor
     ArgumentCaptor<Dependency> dependencyToBeAdded;
 
+    Path tempDir;
+    Path pom;
+
     @DisplayName("should return error when")
     @ParameterizedTest(name = "groupId={0}, artifactId={1}")
     @MethodSource("invalidParameters")
     void shouldReturnErrorsForInvalidRequiredParameters(final String groupId,
                                                         final String artifactId) {
         Assertions.assertThrows(MojoExecutionException.class, () -> {
-            AddDependencyMojo mojo = new AddDependencyMojo();
-            mojo.backupFunction = backupFunction;
-            mojo.rollbackFunction = rollbackFunction;
+            AddDependencyMojo mojo = newMojo();
             mojo.gav = Arrays.stream(new String[]{groupId, artifactId})
                     .filter(Objects::nonNull)
                     .collect(Collectors.joining(":"));
             mojo.execute();
         });
 
-        verify(backupFunction, never()).accept(any(), any());
+        verify(backupFunction, never()).apply(any(), any());
         verify(rollbackFunction, never()).accept(any(), any());
     }
 
@@ -129,15 +139,14 @@ class AddDependencyMojoTest {
         mojo.type = "jar";
         mojo.classifier = "classified";
         mojo.scope = "compile";
-        mojo.pomEditor = pomEditor;
 
 
         //When
         mojo.execute();
 
         //Then
-        verify(pomEditor, atLeastOnce()).execute(targetPom.capture(), dependencyToBeAdded.capture());
-        verify(backupFunction, atLeastOnce()).accept(any(), any());
+        verify(addDependencyCommand, atLeastOnce()).accept(targetPom.capture(), dependencyToBeAdded.capture());
+        verify(backupFunction, atLeastOnce()).apply(any(Log.class), any(Path.class));
         verify(rollbackFunction, never()).accept(any(), any());
         verify(log, atLeastOnce()).info(anyString());
 
@@ -154,10 +163,38 @@ class AddDependencyMojoTest {
 
     private AddDependencyMojo newMojo() {
         AddDependencyMojo mojo = new AddDependencyMojo();
+        mojo.pom = this.pom.toString();
         mojo.setLog(log);
         mojo.backupFunction = backupFunction;
         mojo.rollbackFunction = rollbackFunction;
+        mojo.addDependencyCommand =
+                (path, dep) -> addDependencyCommand.accept(path, dep);
         return mojo;
     }
 
+
+    @BeforeEach
+    void createTempDirAndPom() throws IOException {
+        this.tempDir = Files.createTempDirectory(null);
+        this.log = mock(Log.class);
+        this.pom = newDummyPom();
+    }
+
+    private Path newDummyPom() throws IOException {
+        Path pom = Files.createTempFile(tempDir, "pom", ".xml");
+        Files.copy(Path.of("pom.xml"), pom, StandardCopyOption.REPLACE_EXISTING);
+        return pom;
+    }
+
+    @AfterEach
+    void destroyTempDir() {
+        Optional.ofNullable(tempDir).ifPresent(tempDir -> delete(tempDir.toFile()));
+    }
+
+    void delete(File file) {
+        if (file.isDirectory()) {
+            Arrays.stream(file.listFiles()).forEach(this::delete);
+        }
+        file.delete();
+    }
 }

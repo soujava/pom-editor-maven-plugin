@@ -64,7 +64,7 @@
         <maven.compiler.source>11</maven.compiler.source>
         <maven.compiler.target>11</maven.compiler.target>
         <maven.compiler.release>11</maven.compiler.release>
-        <maven.version>3.8.6</maven.version>
+        <maven.version>3.8.1</maven.version>
 
         <junit.version>5.9.1</junit.version>
         <maven-plugin-annotations.version>3.6.4</maven-plugin-annotations.version>
