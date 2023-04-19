@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package br.org.soujava.pomeditor;
+package br.org.soujava.pomeditor.adddep;
 
 import java.util.Arrays;
 import java.util.Objects;

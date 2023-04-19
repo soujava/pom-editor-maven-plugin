@@ -14,8 +14,9 @@
  * limitations under the License.
  */
 
-package br.org.soujava.pomeditor;
+package br.org.soujava.pomeditor.transaction;
 
+import br.org.soujava.pomeditor.transaction.PomChangeTransaction;
 import org.apache.maven.plugin.logging.Log;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -24,11 +25,9 @@ import org.junit.jupiter.api.Test;
 
 import java.io.File;
 import java.io.IOException;
-import java.math.BigInteger;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
-import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Arrays;
 import java.util.Optional;

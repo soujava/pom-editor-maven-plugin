@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package br.org.soujava.pomeditor;
+package br.org.soujava.pomeditor.adddep;
 
 import org.l2x6.pom.tuner.PomTransformer;
 import org.l2x6.pom.tuner.model.Gavtcs;
@@ -29,7 +29,7 @@ import java.util.stream.Collectors;
 /**
  * Command responsible for adding a dependency to a given pom
  */
-interface AddDependencyCommand {
+public interface AddDependencyCommand {
 
 
     /**

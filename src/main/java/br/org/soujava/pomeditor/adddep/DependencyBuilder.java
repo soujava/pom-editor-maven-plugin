@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package br.org.soujava.pomeditor;
+package br.org.soujava.pomeditor.adddep;
 
 /**
  * Builder for Dependency

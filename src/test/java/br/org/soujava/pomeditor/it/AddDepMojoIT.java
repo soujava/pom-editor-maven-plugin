@@ -45,8 +45,8 @@ import static com.soebes.itf.extension.assertj.MavenExecutionResultAssert.assert
 
 @MavenJupiterExtension
 @MavenGoal("${project.groupId}:${project.artifactId}:${project.version}:add-dep")
-@SystemProperty(value = "gav", content = AddDependencyMojoIT.orgJunitJupiterGav)
-public class AddDependencyMojoIT {
+@SystemProperty(value = "gav", content = AddDepMojoIT.orgJunitJupiterGav)
+public class AddDepMojoIT {
 
     static final String orgJunitJupiterGroupId = "org.junit.jupiter";
     static final String junitJupiterArtifactId = "junit-jupiter";

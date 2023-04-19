@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package br.org.soujava.pomeditor;
+package br.org.soujava.pomeditor.transaction;
 
 import org.apache.maven.plugin.logging.Log;
 
@@ -83,7 +83,7 @@ public class PomChangeTransaction {
         return new PomChangeTransactionBuilder();
     }
 
-    static class PomChangeTransactionBuilder {
+    public static class PomChangeTransactionBuilder {
 
         private Log log;
         private Path pom;

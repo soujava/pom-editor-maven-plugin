@@ -14,8 +14,11 @@
  * limitations under the License.
  */
 
-package br.org.soujava.pomeditor;
+package br.org.soujava.pomeditor.mojo;
 
+import br.org.soujava.pomeditor.transaction.PomChangeTransaction;
+import br.org.soujava.pomeditor.adddep.AddDependencyCommand;
+import br.org.soujava.pomeditor.adddep.Dependency;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
@@ -35,7 +38,7 @@ import java.util.function.BiFunction;
  * or the given dependency's version is greater than the existent at target POM
  */
 @Mojo(name = "add-dep")
-public class AddDependencyMojo extends AbstractMojo {
+public class AddDepMojo extends AbstractMojo {
 
     @Parameter(property = "gav")
     String gav;
@@ -61,7 +64,7 @@ public class AddDependencyMojo extends AbstractMojo {
         Path pomFile = Paths.get(pom);
         Dependency dependency = buildDependency();
         try {
-            buildTransaction(pomFile)
+            transactionFor(pomFile)
                     .execute(() -> Optional
                             .ofNullable(this.addDependencyCommand)
                             .orElse(AddDependencyCommand::execute)
@@ -76,7 +79,7 @@ public class AddDependencyMojo extends AbstractMojo {
         getLog().info(String.format("added the dependency: %s to the pom: %s ", addedDependency, changedPom));
     }
 
-    private PomChangeTransaction buildTransaction(Path pomFile) {
+    private PomChangeTransaction transactionFor(Path pomFile) {
         return PomChangeTransaction
                 .builder()
                 .withLog(getLog())

@@ -14,9 +14,10 @@
  * limitations under the License.
  */
 
-package br.org.soujava.pomeditor;
+package br.org.soujava.pomeditor.mojo;
 
 
+import br.org.soujava.pomeditor.adddep.Dependency;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
 import org.apache.maven.plugin.logging.Log;
@@ -57,7 +58,7 @@ import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 
 @ExtendWith(MockitoExtension.class)
-class AddDependencyMojoTest {
+class AddDepMojoTest {
 
     @Mock
     BiConsumer<Path, Dependency> addDependencyCommand;
@@ -85,7 +86,7 @@ class AddDependencyMojoTest {
     void shouldReturnErrorsForInvalidRequiredParameters(final String groupId,
                                                         final String artifactId) {
         Assertions.assertThrows(MojoExecutionException.class, () -> {
-            AddDependencyMojo mojo = newMojo();
+            AddDepMojo mojo = newMojo();
             mojo.gav = Arrays.stream(new String[]{groupId, artifactId})
                     .filter(Objects::nonNull)
                     .collect(Collectors.joining(":"));
@@ -134,7 +135,7 @@ class AddDependencyMojoTest {
         String expectedArtifactId = "artifactId";
         String expectedVersion = "222";
 
-        AddDependencyMojo mojo = newMojo();
+        AddDepMojo mojo = newMojo();
         mojo.gav = expectedGroupId + ":" + expectedArtifactId + ":" + expectedVersion;
         mojo.type = "jar";
         mojo.classifier = "classified";
@@ -161,8 +162,8 @@ class AddDependencyMojoTest {
 
     }
 
-    private AddDependencyMojo newMojo() {
-        AddDependencyMojo mojo = new AddDependencyMojo();
+    private AddDepMojo newMojo() {
+        AddDepMojo mojo = new AddDepMojo();
         mojo.pom = this.pom.toString();
         mojo.setLog(log);
         mojo.backupFunction = backupFunction;
