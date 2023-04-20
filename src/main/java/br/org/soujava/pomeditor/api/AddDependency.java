@@ -15,9 +15,8 @@
  *
  */
 
-package br.org.soujava.pomeditor.control;
+package br.org.soujava.pomeditor.api;
 
-import br.org.soujava.pomeditor.entity.Dependency;
 import org.l2x6.pom.tuner.PomTransformer;
 import org.l2x6.pom.tuner.model.Gavtcs;
 
@@ -31,14 +30,16 @@ import java.util.stream.Collectors;
 /**
  * Command responsible for adding a dependency to a given pom
  */
-public final class AddDependency {
+public interface AddDependency {
+
 
     /**
      * Add a dependency informed by the {@link Dependency} instance into the target POM xml
-     * @param pom it's the target POM xml
+     *
+     * @param pom        it's the target POM xml
      * @param dependency it's an {@link Dependency} instance
      */
-    public static void execute(Path pom, Dependency dependency) {
+    static void execute(Path pom, Dependency dependency) {
         new PomTransformer(
                 pom,
                 StandardCharsets.UTF_8,

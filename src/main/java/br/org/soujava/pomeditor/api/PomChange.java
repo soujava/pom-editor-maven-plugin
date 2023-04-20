@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package br.org.soujava.pomeditor.control;
+package br.org.soujava.pomeditor.api;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -47,7 +47,7 @@ public final class PomChange {
         this.pom = pom;
         this.logger = Optional.ofNullable(logger).orElse(System.out::println);
         this.backupFunction = Optional.ofNullable(backupFunction).orElse(this::backup);
-        this.rollbackFunction = Optional.ofNullable(rollbackFunction).orElse(Rollback::execute);
+        this.rollbackFunction = Optional.ofNullable(rollbackFunction).orElse(PomRollback::execute);
     }
 
     public static PomChangeBuilder builder() {
