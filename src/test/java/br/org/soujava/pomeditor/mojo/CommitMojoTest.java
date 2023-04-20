@@ -35,7 +35,7 @@ import static org.mockito.Mockito.atLeastOnce;
 import static org.mockito.Mockito.verify;
 
 @ExtendWith(MockitoExtension.class)
-class PomCommitMojoTest {
+class CommitMojoTest {
 
     @Mock
     Log log;

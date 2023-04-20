@@ -1,23 +1,24 @@
 /*
- * Copyright 2023 the original author or authors.
+ * Copyright 2023  the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- * http://www.apache.org/licenses/LICENSE-2.0
+ *     http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
+ *
  */
 
-package br.org.soujava.pomeditor;
+package br.org.soujava.pomeditor.mojo;
 
 
-import br.org.soujava.pomeditor.adddep.Dependency;
+import br.org.soujava.pomeditor.api.Dependency;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
 import org.apache.maven.plugin.logging.Log;
@@ -44,7 +45,8 @@ import java.util.Arrays;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.function.BiConsumer;
-import java.util.function.BiFunction;
+import java.util.function.Consumer;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -67,10 +69,10 @@ class AddDependencyMojoTest {
     Log log;
 
     @Mock
-    BiFunction<Log, Path, Boolean> backupFunction;
+    Function<Path, Boolean> backupFunction;
 
     @Mock
-    BiConsumer<Log, Path> rollbackFunction;
+    Consumer<Path> rollbackFunction;
 
     @Captor
     ArgumentCaptor<Path> targetPom;
@@ -93,8 +95,8 @@ class AddDependencyMojoTest {
             mojo.execute();
         });
 
-        verify(backupFunction, never()).apply(any(), any());
-        verify(rollbackFunction, never()).accept(any(), any());
+        verify(backupFunction, never()).apply(any());
+        verify(rollbackFunction, never()).accept(any());
     }
 
     static Stream<Arguments> invalidParameters() {
@@ -147,8 +149,8 @@ class AddDependencyMojoTest {
 
         //Then
         verify(addDependencyCommand, atLeastOnce()).accept(targetPom.capture(), dependencyToBeAdded.capture());
-        verify(backupFunction, atLeastOnce()).apply(any(Log.class), any(Path.class));
-        verify(rollbackFunction, never()).accept(any(), any());
+        verify(backupFunction, atLeastOnce()).apply(any(Path.class));
+        verify(rollbackFunction, never()).accept(any());
         verify(log, atLeastOnce()).info(anyString());
 
         var addDependency = this.dependencyToBeAdded.getValue();
