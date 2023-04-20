@@ -16,7 +16,7 @@
 
 package br.org.soujava.pomeditor.transaction;
 
-import br.org.soujava.pomeditor.transaction.PomChangeTransaction;
+import br.org.soujava.pomeditor.control.PomChange;
 import org.apache.maven.plugin.logging.Log;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -57,7 +57,7 @@ class PomChangeTransactionTest {
         @BeforeEach
         void setup() throws IOException {
             createTempDirAndPom();
-            this.backupPom = PomChangeTransaction.backupFileOf(pom);
+            this.backupPom = PomChange.backupFileOf(pom);
             if (this.backupPom.toFile().exists())
                 this.backupPom.toFile().delete();
         }
@@ -153,7 +153,7 @@ class PomChangeTransactionTest {
         String expectedCheckSum = checksum(pom);
         assertNotEquals(expectedCheckSum, checksum(backup));
 
-        PomChangeTransaction.commit(log, pom);
+        PomChange.commit(log, pom);
         verify(log, atMost(2)).info(anyString());
 
         assertTrue(pom.toFile().exists());
@@ -173,7 +173,7 @@ class PomChangeTransactionTest {
         String expectedCheckSum = checksum(backup);
         assertNotEquals(expectedCheckSum, checksum(pom));
 
-        PomChangeTransaction.rollback(log, pom);
+        PomChange.rollback(log, pom);
         verify(log, atMost(2)).info(anyString());
 
         assertTrue(pom.toFile().exists());
@@ -183,8 +183,8 @@ class PomChangeTransactionTest {
 
     }
 
-    private PomChangeTransaction.PomChangeTransactionBuilder getPomChangeTransactionBuilder() {
-        return PomChangeTransaction.builder()
+    private PomChange.PomChangeBuilder getPomChangeTransactionBuilder() {
+        return PomChange.builder()
                 .withLog(log)
                 .withPom(pom);
     }
@@ -206,7 +206,7 @@ class PomChangeTransactionTest {
     }
 
     private Path newDummyBackup(Path pom) throws IOException {
-        Path backupFile = PomChangeTransaction.backupFileOf(pom);
+        Path backupFile = PomChange.backupFileOf(pom);
         Files.writeString(backupFile, UUID.randomUUID().toString(), StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING, StandardOpenOption.WRITE);
         return backupFile;
     }

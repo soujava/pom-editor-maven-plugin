@@ -33,7 +33,7 @@ import static com.soebes.itf.extension.assertj.MavenExecutionResultAssert.assert
 
 @MavenJupiterExtension
 @MavenGoal("${project.groupId}:${project.artifactId}:${project.version}:rollback")
-class RollbackMojoIT {
+class PomRollbackMojoIT {
 
     String expectedChecksum;
 

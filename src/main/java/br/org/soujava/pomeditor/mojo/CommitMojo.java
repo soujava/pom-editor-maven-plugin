@@ -14,9 +14,10 @@
  * limitations under the License.
  */
 
-package br.org.soujava.pomeditor.mojo;
+package br.org.soujava.pomeditor;
 
-import br.org.soujava.pomeditor.transaction.PomChangeTransaction;
+import br.org.soujava.pomeditor.control.Commit;
+import br.org.soujava.pomeditor.control.PomChange;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
@@ -27,9 +28,11 @@ import org.apache.maven.plugins.annotations.Parameter;
 import java.nio.file.Path;
 import java.util.Optional;
 import java.util.function.BiConsumer;
+import java.util.function.Consumer;
+import java.util.function.Function;
 
 /**
- * Remove backup POM file
+ * Mojo responsible for committing the POM changes and removing the backup POM file
  */
 @Mojo(name = "commit")
 public class CommitMojo extends AbstractMojo {
@@ -37,12 +40,22 @@ public class CommitMojo extends AbstractMojo {
     @Parameter(property = "pom", defaultValue = "pom.xml")
     String pom = "pom.xml";
 
-    BiConsumer<Log, Path> commitFunction;
+    Consumer<Path> commitFunction;
 
     @Override
     public void execute() throws MojoExecutionException, MojoFailureException {
-        Optional.ofNullable(commitFunction)
-                .orElse(PomChangeTransaction::commit)
-                .accept(getLog(), Path.of(pom));
+        Path targetPom = Path.of(this.pom);
+        try {
+            getLog().info(String.format("trying to commit the changes of the \"%s\" file...", targetPom));
+            Optional.ofNullable(commitFunction)
+                    .orElse(Commit::execute)
+                    .accept(targetPom);
+            getLog().info("changes has been committed");
+        } catch (RuntimeException ex) {
+            throw new MojoFailureException(
+                    String.format("cannot commit the file \"%s\": %s", targetPom.toString(), ex.getMessage()),
+                    ex
+            );
+        }
     }
 }

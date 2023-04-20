@@ -14,9 +14,9 @@
  * limitations under the License.
  */
 
-package br.org.soujava.pomeditor.mojo;
+package br.org.soujava.pomeditor;
 
-import br.org.soujava.pomeditor.mojo.GreetingMojo;
+import br.org.soujava.pomeditor.GreetingMojo;
 import org.apache.maven.plugin.logging.Log;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

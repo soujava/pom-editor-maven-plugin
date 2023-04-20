@@ -14,15 +14,14 @@
  * limitations under the License.
  */
 
-package br.org.soujava.pomeditor.mojo;
+package br.org.soujava.pomeditor;
 
-import br.org.soujava.pomeditor.transaction.PomChangeTransaction;
-import br.org.soujava.pomeditor.adddep.AddDependencyCommand;
 import br.org.soujava.pomeditor.adddep.Dependency;
+import br.org.soujava.pomeditor.control.AddDependency;
+import br.org.soujava.pomeditor.control.PomChange;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
-import org.apache.maven.plugin.logging.Log;
 import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
 
@@ -30,7 +29,8 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Optional;
 import java.util.function.BiConsumer;
-import java.util.function.BiFunction;
+import java.util.function.Consumer;
+import java.util.function.Function;
 
 /**
  * Mojo responsible to add a given dependency to a target POM
@@ -38,7 +38,7 @@ import java.util.function.BiFunction;
  * or the given dependency's version is greater than the existent at target POM
  */
 @Mojo(name = "add-dep")
-public class AddDepMojo extends AbstractMojo {
+public class AddDependencyMojo extends AbstractMojo {
 
     @Parameter(property = "gav")
     String gav;
@@ -53,9 +53,9 @@ public class AddDepMojo extends AbstractMojo {
 
     BiConsumer<Path, Dependency> addDependencyCommand;
 
-    BiFunction<Log, Path, Boolean> backupFunction;
+    Function<Path, Boolean> backupFunction;
 
-    BiConsumer<Log, Path> rollbackFunction;
+    Consumer<Path> rollbackFunction;
 
 
     @Override
@@ -64,25 +64,27 @@ public class AddDepMojo extends AbstractMojo {
         Path pomFile = Paths.get(pom);
         Dependency dependency = buildDependency();
         try {
+            getLog().info(String.format("trying to add the dependency: %s to the \"%s\" file...", pomFile));
+
             transactionFor(pomFile)
                     .execute(() -> Optional
                             .ofNullable(this.addDependencyCommand)
-                            .orElse(AddDependencyCommand::execute)
-                            .andThen(this::onSuccess)
+                            .orElse(AddDependency::execute)
                             .accept(pomFile, dependency));
+
+            getLog().info(String.format("added the dependency: %s to the \"%s\" file.", dependency, pomFile));
         } catch (Throwable ex) {
-            throw new MojoExecutionException(ex.getMessage(),ex);
+            throw new MojoFailureException(String.format("cannot add the dependency: %s to the \"%s\" file: %s",
+                    dependency,
+                    pomFile,
+                    ex.getMessage()), ex);
         }
     }
 
-    private void onSuccess(Path changedPom, Dependency addedDependency) {
-        getLog().info(String.format("added the dependency: %s to the pom: %s ", addedDependency, changedPom));
-    }
-
-    private PomChangeTransaction transactionFor(Path pomFile) {
-        return PomChangeTransaction
+    private PomChange transactionFor(Path pomFile) {
+        return PomChange
                 .builder()
-                .withLog(getLog())
+                .withLogger(getLog()::info)
                 .withPom(pomFile)
                 .withBackupFunction(backupFunction)
                 .withRollbackFunction(rollbackFunction)
@@ -98,7 +100,7 @@ public class AddDepMojo extends AbstractMojo {
                     .setScope(scope)
                     .build();
         } catch (RuntimeException ex) {
-            throw new MojoExecutionException(ex.getMessage(),ex);
+            throw new MojoExecutionException(ex.getMessage(), ex);
         }
     }
 
