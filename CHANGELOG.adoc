@@ -10,13 +10,18 @@ and this project adheres to https://semver.org/spec/v2.0.0.html[Semantic Version
 
 === Added
 - Enhance integration tests for `commit` and `rollback` mojos;
+- Added tests for API classes;
 
 === Changes
-- Refactored model classes to improve the maintainability
-- Refactored add-dep` mojo to use new implementation;
+- Changed package structure: the model classes were moved to the `api` package;
+- Changed package structure: the mojo classes were moved to the `mojo` package;
+- Refactored classes to improve the maintainability;
+- Refactored `add-dep` mojo to use new implementation;
+- Refactored `commit` mojo to use new implementation;
+- Refactored `rollback` mojo to use new implementation;
 
 === Fixes
-- Changed PomChangeTransaction class for maintainability improvement
+- ?
 
 == [0.0.3]
 
