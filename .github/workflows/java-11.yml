@@ -63,9 +63,9 @@ jobs:
           echo "(java-11) branches = ${{ steps.jacoco.outputs.branches }}"
 
       - name: Upload JaCoCo coverage report
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
-          name: java11-jacoco-report
+          name: jacoco-report-java-11
           path: target/site/jacoco/
       
       - name: Deploy to Coverage Branch
