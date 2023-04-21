@@ -26,6 +26,22 @@ and this project adheres to https://semver.org/spec/v2.0.0.html[Semantic Version
 === Fixes
 - ?
 
+== [1.0.0-SNAPSHOT]
+
+=== Added
+- Enhance integration tests for `commit` and `rollback` mojos;
+
+=== Changes
+- Changed package structure: the model classes were moved to the `api` package;
+- Changed package structure: the mojo classes were moved to the `mojo` package;
+- Refactored classes to improve the maintainability;
+- Refactored `add-dep` mojo to use new implementation;
+- Refactored `commit` mojo to use new implementation;
+- Refactored `rollback` mojo to use new implementation;
+- Enhanced tests for `api` classes;
+- Enhanced tests for `mojo` classes;
+- Enhanced integration tests for `commit` and `rollback` mojos;
+
 == [0.0.3]
 
 === Added
