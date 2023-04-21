@@ -2,8 +2,7 @@
 = POM Editor Maven Plugin
 :toc: auto
 
-
-image:https://github.com/soujava/pom-editor-maven-plugin/actions/workflows/github-pages.yml/badge.svg[Documentation,link=https://soujava.github.io/pom-editor-maven-plugin/plugin-info.html, window=_blank, target=_blank]
+*Plugin Documentation:* image:https://github.com/soujava/pom-editor-maven-plugin/actions/workflows/github-pages.yml/badge.svg[Documentation,link=https://soujava.github.io/pom-editor-maven-plugin/plugin-info.html, window=_blank, target=_blank]
 
 image:https://img.shields.io/maven-central/v/br.org.soujava/pom-editor-maven-plugin?style=flat-square[Maven Central, link=https://central.sonatype.com/search?smo=true&namespace=br.org.soujava&q=br.org.soujava, window=_blank, target=_blank] image:https://img.shields.io/maven-metadata/v?label=s01.oss.sonatype.org&metadataUrl=https%3A%2F%2Fs01.oss.sonatype.org%2Fcontent%2Frepositories%2Fsnapshots%2Fbr%2Forg%2Fsoujava%2Fpom-editor-maven-plugin%2Fmaven-metadata.xml&style=flat-square[Maven SNAPSHOT Repo,link=https://bit.ly/3oxRi0X, window=_blank, target=_blank]
 
