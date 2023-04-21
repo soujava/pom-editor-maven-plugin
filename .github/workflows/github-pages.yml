@@ -54,7 +54,7 @@ jobs:
           cache: maven
 
       - name: Build site
-        run: mvn clean site -B -DskipTests
+        run: mvn clean verify site -B
     
       - name: Generated assets 
         run: |
