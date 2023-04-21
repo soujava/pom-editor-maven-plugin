@@ -40,6 +40,8 @@ jobs:
           distribution: 'temurin'
           java-version: 11
           cache: maven
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: Build with Maven
         run: mvn -B verify -P run-its
 
@@ -67,3 +69,5 @@ jobs:
         with:
           name: java11-jacoco-report
           path: target/site/jacoco/
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
