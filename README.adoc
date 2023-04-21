@@ -4,9 +4,16 @@
 
 [%autowidth,cols="a,a", frame=none, grid=none, role="" ]
 |===
-| image:https://github.com/soujava/pom-editor-maven-plugin/actions/workflows/java-11.yml/badge.svg[ link=https://github.com/soujava/pom-editor-maven-plugin/actions/workflows/java-11.yml, window=_blank, target=_blank]
-| image:https://img.shields.io/maven-central/v/br.org.soujava/pom-editor-maven-plugin?style=flat-square[Maven Central, link=https://central.sonatype.com/search?smo=true&namespace=br.org.soujava&q=br.org.soujava, window=_blank, target=_blank]
+2+| image:https://img.shields.io/maven-central/v/br.org.soujava/pom-editor-maven-plugin?style=flat-square[Maven Central, link=https://central.sonatype.com/search?smo=true&namespace=br.org.soujava&q=br.org.soujava, window=_blank, target=_blank]
+
+2+| image:https://github.com/soujava/pom-editor-maven-plugin/actions/workflows/java-11.yml/badge.svg[ link=https://github.com/soujava/pom-editor-maven-plugin/actions/workflows/java-11.yml, window=_blank, target=_blank]
+
+2+| image:https://github.com/soujava/pom-editor-maven-plugin/actions/workflows/java-17.yml/badge.svg[ link=https://github.com/soujava/pom-editor-maven-plugin/actions/workflows/java-17.yml, window=_blank, target=_blank]
+
+| image:https://github.com/soujava/pom-editor-maven-plugin/raw/coverage/jacoco_java-11.svg[ link=https://soujava.github.io/pom-editor-maven-plugin/jacoco/index.html, window=_blank, target=_blank]
+| image:https://github.com/soujava/pom-editor-maven-plugin/raw/coverage/branches_java-11.svg[ link=https://soujava.github.io/pom-editor-maven-plugin/jacoco/index.html, window=_blank, target=_blank]
 |===
+
 == Introduction
 
 Facilitate manipulation such as managing POM dependencies through CLI (command line interface)
