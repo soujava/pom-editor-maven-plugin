@@ -17,8 +17,8 @@
 
 package br.org.soujava.pomeditor.mojo;
 
-import br.org.soujava.pomeditor.api.Dependency;
 import br.org.soujava.pomeditor.api.AddDependency;
+import br.org.soujava.pomeditor.api.Dependency;
 import br.org.soujava.pomeditor.api.PomChange;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
@@ -67,11 +67,7 @@ public class AddDependencyMojo extends AbstractMojo {
         try {
             getLog().info(String.format("trying to add the dependency: %s to the \"%s\" file...", dependency, pomFile));
 
-            transactionFor(pomFile)
-                    .execute(() -> Optional
-                            .ofNullable(this.addDependencyCommand)
-                            .orElse(AddDependency::execute)
-                            .accept(pomFile, dependency));
+            change(pomFile).execute(() -> dependencyCommand().accept(pomFile, dependency));
 
             getLog().info(String.format("added the dependency: %s to the \"%s\" file.", dependency, pomFile));
         } catch (Throwable ex) {
@@ -82,7 +78,13 @@ public class AddDependencyMojo extends AbstractMojo {
         }
     }
 
-    private PomChange transactionFor(Path pomFile) {
+    private BiConsumer<Path, Dependency> dependencyCommand() {
+        return Optional
+                .ofNullable(this.addDependencyCommand)
+                .orElse(AddDependency::execute);
+    }
+
+    private PomChange change(Path pomFile) {
         return PomChange
                 .builder()
                 .withLogger(getLog()::info)
@@ -96,9 +98,9 @@ public class AddDependencyMojo extends AbstractMojo {
         try {
             return Dependency
                     .ofGav(gav)
-                    .setType(type)
-                    .setClassifier(classifier)
-                    .setScope(scope)
+                    .withType(type)
+                    .withClassifier(classifier)
+                    .withScope(scope)
                     .build();
         } catch (RuntimeException ex) {
             throw new MojoExecutionException(ex.getMessage(), ex);
