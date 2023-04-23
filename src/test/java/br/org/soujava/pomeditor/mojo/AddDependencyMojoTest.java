@@ -18,6 +18,7 @@
 package br.org.soujava.pomeditor.mojo;
 
 
+import br.org.soujava.pomeditor.InvalidGroupIdArtifactIdArgs;
 import br.org.soujava.pomeditor.api.Dependency;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
@@ -29,8 +30,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.Arguments;
-import org.junit.jupiter.params.provider.MethodSource;
+import org.junit.jupiter.params.provider.ArgumentsSource;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Captor;
 import org.mockito.Mock;
@@ -48,10 +48,8 @@ import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.params.provider.Arguments.arguments;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.atLeastOnce;
@@ -84,7 +82,7 @@ class AddDependencyMojoTest {
 
     @DisplayName("should return error when")
     @ParameterizedTest(name = "groupId={0}, artifactId={1}")
-    @MethodSource("invalidParameters")
+    @ArgumentsSource(InvalidGroupIdArtifactIdArgs.class)
     void shouldReturnErrorsForInvalidRequiredParameters(final String groupId,
                                                         final String artifactId) {
         Assertions.assertThrows(MojoExecutionException.class, () -> {
@@ -98,36 +96,6 @@ class AddDependencyMojoTest {
         verify(backupFunction, never()).apply(any());
         verify(rollbackFunction, never()).accept(any());
     }
-
-    static Stream<Arguments> invalidParameters() {
-        return Stream.of(
-                arguments(
-                        null, // groupId,
-                        null // artifactId,
-                ),
-                arguments(
-                        null, // groupId,
-                        "artifactId" // artifactId,
-                ),
-                arguments(
-                        "groupId", // groupId,
-                        null // artifactId,
-                ),
-                arguments(
-                        "", // groupId,
-                        "" // artifactId,
-                ),
-                arguments(
-                        "", // groupId,
-                        "artifactId" // artifactId,
-                ),
-                arguments(
-                        "groupId", // groupId,
-                        "" // artifactId,
-                )
-        );
-    }
-
 
     @Test
     void shouldAddDependencyProperly() throws MojoExecutionException, MojoFailureException {
