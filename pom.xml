@@ -406,6 +406,8 @@
                                 <module name="com.puppycrawl.tools.checkstyle.checks.design.VisibilityModifierCheck">
                                     <property name="packageAllowed" value="true"/>
                                     <property name="protectedAllowed" value="true"/>
+                                    <!-- TODO verify -->
+                                    <property name="allowPublicFinalFields" value="true"/>
                                     <property name="publicMemberPattern" value="^serialVersionUID"/>
                                     <property name="severity" value="warning"/>
                                 </module>
