@@ -4,6 +4,7 @@ about: Suggest a new idea for POM Editor Maven Plugin
 title: ''
 labels: ''
 assignees: ''
+projects: 'soujava/3'
 
 ---
 
