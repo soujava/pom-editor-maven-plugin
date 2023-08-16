@@ -1,6 +1,7 @@
 name: 🐛 Bug Report
 description: Report a reproducible bug
 labels: ["bug"]
+projects: ["soujava/3"]
 body:
   - type: markdown
     attributes:
