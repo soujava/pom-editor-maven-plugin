@@ -95,6 +95,24 @@ Try to explain the scenario to us by following these tips:
 
 To contribute to the repo one must adhere to the following:
 
+**Conventional commits**
+
+Conventional commits is a specification to standardize
+commit messages. It improves the legibility and the meaning
+of the messages enforcing rules to be followed.
+
+The message should be formatted as shown bellow.
+
+[source]
+----
+<type>[optional scope]: <description>
+
+[optional body]
+
+[optional footer(s)]
+----
+
+
 **Types of Commits:**
 
 - **fix:** Any commit that patches a bug anywhere in the codebase
@@ -106,10 +124,47 @@ To contribute to the repo one must adhere to the following:
 **Examples of commits**
 
 - **Regular Commit Message:** This may be used for either fix or feat and can be written as `fix: <message>` or `feat: <message>`
+
+[source]
+----
+fix: add NullPointerException validation
+----
+
+[source]
+----
+feat: supporting GAV parameter
+----
 - **Commit with breaking change**: Example: A new feature being introduced as a breaking change can be written as `feat!: <message>`, this can also simply be written as a regular feat with the *BREAKING CHANGE* appended to it at the end of the commit
+
+[source]
+----
+feat!: replace flag
+----
+
+[source]
+----
+feat: add new flag
+
+BREAKING CHANGE: used records, a feature that requires from Java 17 onwards
+----
 - **Specific breaking change:**: Example: A breaking change introduced with a new feature somewhere in the api can be written as `feat(api)!: <message>`
+
+[source]
+----
+feat(api)!: add a required flag
+----
 - **Changing the docs:** `docs: <message>`
+
+[source]
+----
+docs: add README.md
+----
 - **Regular commit message with specification:** A new feature introduced in the api can be written as `feat(api): <message>`
+
+[source]
+----
+feat(api): add support for pom parent
+----
 
 **Formatting Commit messages**
 
