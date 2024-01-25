@@ -14,6 +14,8 @@ Facilitate manipulation such as managing POM dependencies through CLI (command l
 
 == How to use it
 
+==== Add a dependency
+
 Let's suppose that you need to add JUnit Jupiter version 5.9.2 into your POM in the test scope, you could perform the following command inside on the target maven project:
 
 [source, sh]
@@ -40,6 +42,10 @@ Then you'll be able to perform the plugin by its prefix:
 ----
 mvn pom-editor:add-dep -Dgav='org.junit.jupiter:junit-jupiter:5.9.2' -Dscope=test
 ----
+
+==== Confirm the changes
+
+==== Revert the changes
 
 == Goals
 
