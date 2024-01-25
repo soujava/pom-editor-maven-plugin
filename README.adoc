@@ -18,7 +18,7 @@ Let's suppose that you need to add JUnit Jupiter version 5.9.2 into your POM in 
 
 [source, sh]
 ----
-mvn br.org.soujava:pom-editor:add-dep -Dgav='org.junit.jupiter:junit-jupiter:5.9.2' -Dscope=test
+mvn br.org.soujava:pom-editor-maven-plugin:add-dep -Dgav='org.junit.jupiter:junit-jupiter:5.9.2' -Dscope=test
 ----
 
 It's a Maven plugin then you may register the groupId into your `settings.xml` pluginGroups node :
