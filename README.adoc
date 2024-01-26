@@ -45,7 +45,34 @@ mvn pom-editor:add-dep -Dgav='org.junit.jupiter:junit-jupiter:5.9.2' -Dscope=tes
 
 ==== Confirm the changes
 
+When you perform the goal add-dep with the command below:
+
+[source,sh]
+$ mvn pom-editor:add-dep -Dgav='junit:junit:4.13'
+
+The plugin will create a backup POM file based on the target POM if such one doesn't exist.
+
+[source,sh]
+$ tree .
+.
+├── pom.xml
+└── pom.xml.backup
+
+You could perform multiple times the add-dep goal as you need.
+
+Then, when you're done, if there's no problem with the changed POM, you could confirm the changes by performing the commit goal.
+
+[source,sh]
+$ mvn pom-editor:commit
+
 ==== Revert the changes
+
+You could also perform the rollback goal:
+
+[source,sh]
+$ mvn pom-editor:rollback
+
+This goal will revert the changes, replacing the changed POM file to the backup POM file.
 
 == Goals
 
