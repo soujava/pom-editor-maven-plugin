@@ -14,17 +14,9 @@ Facilitate manipulation such as managing POM dependencies through CLI (command l
 
 == How to use it
 
-==== Add a dependency
-
-Let's suppose that you need to add JUnit Jupiter version 5.9.2 into your POM in the test scope, you could perform the following command inside on the target maven project:
-
-[source, sh]
-----
-mvn br.org.soujava:pom-editor-maven-plugin:add-dep -Dgav='org.junit.jupiter:junit-jupiter:5.9.2' -Dscope=test
-----
-
-It's a Maven plugin then you may register the groupId into your `settings.xml` pluginGroups node :
-
+[TIP]
+===============================
+In order to make easier the plugin utilization we can register the groupId into the `settings.xml` like the snipped code below:
 [source,xml]
 ----
 <settings >
@@ -35,15 +27,30 @@ It's a Maven plugin then you may register the groupId into your `settings.xml` p
     <!-- snipped -->
 </settings>
 ----
+With that, we will be able to perform the plugin by using its prefix.
+So, instead of to perform the plugin by the following command:
+[source, sh]
+----
+mvn br.org.soujava:pom-editor-maven-plugin:<GOAL>
+----
+We may perform it just providing its prefix like below:
+[source, sh]
+----
+mvn pom-editor:<GOAL>
+----
+In the documentation, we'll assume that you have done this configuration.
+===============================
 
-Then you'll be able to perform the plugin by its prefix:
+=== Add a dependency
 
-[source,sh]
+Let's suppose that you need to add JUnit Jupiter version 5.9.2 into your POM in the test scope, you could perform the following command inside on the target maven project:
+
+[source, sh]
 ----
 mvn pom-editor:add-dep -Dgav='org.junit.jupiter:junit-jupiter:5.9.2' -Dscope=test
 ----
 
-==== Confirm the changes
+=== Confirm the changes
 
 When you perform the goal add-dep with the command below:
 
@@ -65,7 +72,7 @@ Then, when you're done, if there's no problem with the changed POM, you could co
 [source,sh]
 $ mvn pom-editor:commit
 
-==== Revert the changes
+=== Revert the changes
 
 You could also perform the rollback goal:
 
