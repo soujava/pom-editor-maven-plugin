@@ -41,7 +41,7 @@ mvn pom-editor:<GOAL>
 In the documentation, we'll assume that you have done this configuration.
 ===============================
 
-=== Add a dependency
+=== Add/Change a dependency
 
 Let's suppose that you need to add JUnit Jupiter version 5.9.2 into your POM in the test scope, you could perform the following command inside on the target maven project:
 
@@ -49,6 +49,38 @@ Let's suppose that you need to add JUnit Jupiter version 5.9.2 into your POM in 
 ----
 mvn pom-editor:add-dep -Dgav='org.junit.jupiter:junit-jupiter:5.9.2' -Dscope=test
 ----
+
+.add-dep supported parameters
+[cols="add-dep params"]
+|===
+|Parameter | Description | Required | Default
+
+| gav
+| Dependency coordinates. Supported format: `groupId:artifactId:version`
+| Yes
+|
+
+| pom
+| Target POM file.
+| No
+| pom.xml
+
+| scope
+| The scope of the dependency - compile, runtime, test, system, and provided
+| No
+|
+
+| type
+| The type of dependency, that will be mapped to a file extension, an optional classifier and a few other attributes
+| No
+|
+
+| classifier
+| The classifier of the dependency. It is appended to the filename after the version.
+| No
+|
+
+|===
 
 === Confirm the changes
 
