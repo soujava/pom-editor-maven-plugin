@@ -82,6 +82,37 @@ mvn pom-editor:add-dep -Dgav='org.junit.jupiter:junit-jupiter:5.9.2' -Dscope=tes
 
 |===
 
+=== Add/Change/Remove a property
+
+Let's suppose that you need to add a property to your pom file.
+
+[source, sh]
+----
+mvn pom-editor:change-prop -Dproperty='custom-property' -Dvalue='Caesar'
+----
+
+.change-prop supported parameters
+[cols="change-prop params"]
+|===
+|Parameter | Description | Required | Default
+
+| pom
+| Target POM file.
+| No
+| pom.xml
+
+| property
+| The name of the property
+| Yes
+|
+
+| value
+| The value of the property, if not specified, the request is to delete the property if it exists.
+| No
+|
+
+|===
+
 === Confirm the changes
 
 When you perform the goal add-dep with the command below:
