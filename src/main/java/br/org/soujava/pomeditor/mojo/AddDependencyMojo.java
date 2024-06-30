@@ -19,8 +19,6 @@ package br.org.soujava.pomeditor.mojo;
 
 import br.org.soujava.pomeditor.api.AddDependency;
 import br.org.soujava.pomeditor.api.Dependency;
-import br.org.soujava.pomeditor.api.PomChange;
-import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
 import org.apache.maven.plugins.annotations.Mojo;
@@ -30,8 +28,6 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Optional;
 import java.util.function.BiConsumer;
-import java.util.function.Consumer;
-import java.util.function.Function;
 
 /**
  * Mojo responsible to add a given dependency to a target POM
@@ -39,7 +35,7 @@ import java.util.function.Function;
  * or the given dependency's version is greater than the existent at target POM
  */
 @Mojo(name = "add-dep")
-public class AddDependencyMojo extends AbstractMojo {
+public class AddDependencyMojo extends EditingMojo {
 
     @Parameter(property = "gav")
     String gav;
@@ -49,15 +45,8 @@ public class AddDependencyMojo extends AbstractMojo {
     String classifier;
     @Parameter(property = "scope")
     String scope;
-    @Parameter(property = "pom", defaultValue = "pom.xml")
-    String pom = "pom.xml";
 
     BiConsumer<Path, Dependency> addDependencyCommand;
-
-    Function<Path, Boolean> backupFunction;
-
-    Consumer<Path> rollbackFunction;
-
 
     @Override
     public void execute() throws MojoExecutionException, MojoFailureException {
@@ -82,16 +71,6 @@ public class AddDependencyMojo extends AbstractMojo {
         return Optional
                 .ofNullable(this.addDependencyCommand)
                 .orElse(AddDependency::execute);
-    }
-
-    private PomChange change(Path pomFile) {
-        return PomChange
-                .builder()
-                .withLogger(getLog()::info)
-                .withPom(pomFile)
-                .withBackupFunction(backupFunction)
-                .withRollbackFunction(rollbackFunction)
-                .build();
     }
 
     private Dependency buildDependency() throws MojoExecutionException {
