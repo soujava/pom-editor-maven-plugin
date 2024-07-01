@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>AddDependency.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">POM Editor Maven Plugin</a> &gt; <a href="index.source.html" class="el_package">br.org.soujava.pomeditor.api</a> &gt; <span class="el_source">AddDependency.java</span></div><h1>AddDependency.java</h1><pre class="source lang-java linenums">/*
+ * Copyright 2023  the original author or authors.
+ *
+ * Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *
+ */
+
+package br.org.soujava.pomeditor.api;
+
+import org.l2x6.pom.tuner.PomTransformer;
+import org.l2x6.pom.tuner.model.Gavtcs;
+
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Path;
+import java.util.List;
+import java.util.Optional;
+import java.util.function.BiConsumer;
+import java.util.stream.Collectors;
+
+/**
+ * Command responsible for adding a dependency to a given pom
+ */
+public interface AddDependency {
+
+
+    /**
+     * Add a dependency informed by the {@link Dependency} instance into the target POM xml
+     *
+     * @param pom        it's the target POM xml
+     * @param dependency it's an {@link Dependency} instance
+     */
+    static void execute(Path pom, Dependency dependency) {
+<span class="nc" id="L43">        new PomTransformer(</span>
+                pom,
+                StandardCharsets.UTF_8,
+                PomTransformer.SimpleElementWhitespace.AUTODETECT_PREFER_SPACE)
+<span class="nc" id="L47">                .transform(addOrUpdateDependencyIfNeeded(dependency));</span>
+<span class="nc" id="L48">    }</span>
+
+    private static PomTransformer.Transformation addOrUpdateDependencyIfNeeded(Dependency dependencyToBeAdded) {
+<span class="nc" id="L51">        return (document, context) -&gt; {</span>
+
+<span class="nc" id="L53">            Gavtcs dependency = toGavtcs(dependencyToBeAdded);</span>
+
+<span class="nc" id="L55">            List&lt;PomTransformer.NodeGavtcs&gt; dependencies = context.getDependencies()</span>
+<span class="nc" id="L56">                    .stream()</span>
+<span class="nc" id="L57">                    .filter(nodeGavtcs -&gt; nodeGavtcs.getGroupId().equals(dependency.getGroupId()))</span>
+<span class="nc" id="L58">                    .filter(nodeGavtcs -&gt; nodeGavtcs.getArtifactId().equals(dependency.getArtifactId()))</span>
+<span class="nc" id="L59">                    .collect(Collectors.toList());</span>
+
+<span class="nc" id="L61">            dependencies.stream().forEach(</span>
+                    nodeGavtcs -&gt; {
+
+<span class="nc" id="L64">                        BiConsumer&lt;String, String&gt; setValue = nodeChanger(nodeGavtcs);</span>
+<span class="nc" id="L65">                        setValue.accept(&quot;version&quot;, dependency.getVersion());</span>
+<span class="nc" id="L66">                        setValue.accept(&quot;type&quot;, dependency.getType());</span>
+<span class="nc" id="L67">                        setValue.accept(&quot;classifier&quot;, dependency.getClassifier());</span>
+<span class="nc" id="L68">                        setValue.accept(&quot;scope&quot;, dependency.getScope());</span>
+
+<span class="nc" id="L70">                    });</span>
+
+<span class="nc bnc" id="L72" title="All 2 branches missed.">            if (dependencies.isEmpty()) {</span>
+<span class="nc" id="L73">                context.addDependencyIfNeeded(dependency, Gavtcs.scopeAndTypeFirstComparator());</span>
+            }
+<span class="nc" id="L75">        };</span>
+    }
+
+    private static Gavtcs toGavtcs(Dependency dependency) {
+<span class="nc" id="L79">        return new Gavtcs(</span>
+<span class="nc" id="L80">                dependency.getGroupId(),</span>
+<span class="nc" id="L81">                dependency.getArtifactId(),</span>
+<span class="nc" id="L82">                dependency.getVersion(),</span>
+<span class="nc" id="L83">                dependency.getType(),</span>
+<span class="nc" id="L84">                dependency.getClassifier(),</span>
+<span class="nc" id="L85">                dependency.getScope()</span>
+        );
+    }
+
+    private static BiConsumer&lt;String, String&gt; nodeChanger(PomTransformer.NodeGavtcs nodeGavtcs) {
+<span class="nc" id="L90">        final PomTransformer.ContainerElement node = nodeGavtcs.getNode();</span>
+
+<span class="nc" id="L92">        return (name, value) -&gt; {</span>
+<span class="nc" id="L93">            Optional&lt;PomTransformer.ContainerElement&gt; targetNode = node.childElementsStream()</span>
+<span class="nc" id="L94">                    .filter(ch -&gt; name.equals(ch.getNode().getLocalName()))</span>
+<span class="nc" id="L95">                    .findFirst();</span>
+<span class="nc bnc" id="L96" title="All 4 branches missed.">            if (!targetNode.isPresent() &amp;&amp; value == null) {</span>
+                /* nothing to do */
+<span class="nc bnc" id="L98" title="All 2 branches missed.">            } else if (!targetNode.isPresent()) {</span>
+<span class="nc" id="L99">                node.addChildTextElement(name, value);</span>
+<span class="nc bnc" id="L100" title="All 2 branches missed.">            } else if (value == null) {</span>
+<span class="nc" id="L101">                targetNode.get().remove(true, true);</span>
+            } else {
+<span class="nc" id="L103">                targetNode.get().getNode().setTextContent(value);</span>
+            }
+<span class="nc" id="L105">        };</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.9.202303310957</span></div></body></html>

@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>PomChange.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">POM Editor Maven Plugin</a> &gt; <a href="index.source.html" class="el_package">br.org.soujava.pomeditor.api</a> &gt; <span class="el_source">PomChange.java</span></div><h1>PomChange.java</h1><pre class="source lang-java linenums">/*
+ * Copyright 2023 the original author or authors.
+ *
+ * Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+package br.org.soujava.pomeditor.api;
+
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.Objects;
+import java.util.Optional;
+import java.util.function.Consumer;
+import java.util.function.Function;
+
+/**
+ * Component responsible for POM changes with backup support
+ */
+public final class PomChange {
+
+    public static Path backupFileOf(Path pom) {
+<span class="fc" id="L33">        Objects.requireNonNull(pom, &quot;pom cannot be null&quot;);</span>
+<span class="fc" id="L34">        return Path.of(pom.toString() + &quot;.backup&quot;);</span>
+    }
+
+    private final Path pom;
+    private final Consumer&lt;String&gt; logger;
+    private final Function&lt;Path, Boolean&gt; backupFunction;
+    private final Consumer&lt;Path&gt; rollbackFunction;
+
+    private PomChange(Path pom,
+                      Consumer&lt;String&gt; logger,
+                      Function&lt;Path, Boolean&gt; backupFunction,
+<span class="fc" id="L45">                      Consumer&lt;Path&gt; rollbackFunction) {</span>
+<span class="fc" id="L46">        Objects.requireNonNull(pom, &quot;pom cannot be null&quot;);</span>
+<span class="fc" id="L47">        this.pom = pom;</span>
+<span class="fc" id="L48">        this.logger = Optional.ofNullable(logger).orElse(System.out::println);</span>
+<span class="fc" id="L49">        this.backupFunction = Optional.ofNullable(backupFunction).orElse(this::backup);</span>
+<span class="fc" id="L50">        this.rollbackFunction = Optional.ofNullable(rollbackFunction).orElse(PomRollback::execute);</span>
+<span class="fc" id="L51">    }</span>
+
+    public static PomChangeBuilder builder() {
+<span class="fc" id="L54">        return new PomChangeBuilder();</span>
+    }
+
+<span class="fc" id="L57">    public static class PomChangeBuilder {</span>
+
+        private Path pom;
+<span class="fc" id="L60">        private Consumer&lt;String&gt; logger = System.out::println;</span>
+        private Function&lt;Path, Boolean&gt; backupFunction;
+        private Consumer&lt;Path&gt; rollbackFunction;
+
+        public PomChangeBuilder withLogger(Consumer&lt;String&gt; logger) {
+<span class="fc" id="L65">            this.logger = logger;</span>
+<span class="fc" id="L66">            return this;</span>
+        }
+
+        public PomChangeBuilder withPom(Path pom) {
+<span class="fc" id="L70">            this.pom = pom;</span>
+<span class="fc" id="L71">            return this;</span>
+        }
+
+        public PomChangeBuilder withBackupFunction(Function&lt;Path, Boolean&gt; backupFunction) {
+<span class="fc" id="L75">            this.backupFunction = backupFunction;</span>
+<span class="fc" id="L76">            return this;</span>
+        }
+
+        public PomChangeBuilder withRollbackFunction(Consumer&lt;Path&gt; rollbackFunction) {
+<span class="fc" id="L80">            this.rollbackFunction = rollbackFunction;</span>
+<span class="fc" id="L81">            return this;</span>
+        }
+
+        public PomChange build() {
+<span class="fc" id="L85">            return new PomChange(this.pom, this.logger, this.backupFunction, this.rollbackFunction);</span>
+        }
+
+    }
+
+    @FunctionalInterface
+    public static interface Executable {
+        void execute() throws Throwable;
+    }
+
+    public void execute(Executable executable) throws Throwable {
+<span class="fc" id="L96">        boolean createdBackupFile = false;</span>
+        try {
+<span class="fc" id="L98">            createdBackupFile = createBackupFileIfNeeded();</span>
+<span class="fc" id="L99">            executable.execute();</span>
+<span class="fc" id="L100">        } catch (Throwable ex) {</span>
+<span class="fc" id="L101">            rollback(createdBackupFile);</span>
+<span class="fc" id="L102">            throw ex;</span>
+<span class="fc" id="L103">        }</span>
+<span class="fc" id="L104">    }</span>
+
+    private boolean createBackupFileIfNeeded() {
+<span class="fc" id="L107">        return Optional.ofNullable(this.backupFunction.apply(this.pom))</span>
+<span class="fc" id="L108">                .orElse(Boolean.FALSE);</span>
+    }
+
+    private void rollback(boolean isBackupOwner) {
+<span class="fc bfc" id="L112" title="All 2 branches covered.">        if (isBackupOwner) {</span>
+<span class="fc" id="L113">            this.rollbackFunction.accept(this.pom);</span>
+        }
+<span class="fc" id="L115">    }</span>
+
+    private Boolean backup(Path pom) {
+<span class="fc" id="L118">        Path backupFile = backupFileOf(pom);</span>
+<span class="fc bfc" id="L119" title="All 2 branches covered.">        if (!backupFile.toFile().exists()) {</span>
+            try {
+<span class="fc" id="L121">                Files.copy(pom, backupFile);</span>
+<span class="fc" id="L122">                logger.accept(String.format(&quot;Backup for '%s' created: '%s'&quot;,</span>
+<span class="fc" id="L123">                        pom.toAbsolutePath(),</span>
+<span class="fc" id="L124">                        backupFile.toAbsolutePath()));</span>
+<span class="fc" id="L125">                return true;</span>
+<span class="nc" id="L126">            } catch (IOException e) {</span>
+<span class="nc" id="L127">                throw new RuntimeException(&quot;failure during backup process:&quot; + e.getMessage(), e);</span>
+            }
+        }
+<span class="fc" id="L130">        return false;</span>
+    }
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.9.202303310957</span></div></body></html>

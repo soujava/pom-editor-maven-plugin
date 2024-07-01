@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>RollbackMojo.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">POM Editor Maven Plugin</a> &gt; <a href="index.source.html" class="el_package">br.org.soujava.pomeditor.mojo</a> &gt; <span class="el_source">RollbackMojo.java</span></div><h1>RollbackMojo.java</h1><pre class="source lang-java linenums">/*
+ * Copyright 2023  the original author or authors.
+ *
+ * Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *
+ */
+
+package br.org.soujava.pomeditor.mojo;
+
+import br.org.soujava.pomeditor.api.PomRollback;
+import org.apache.maven.plugin.AbstractMojo;
+import org.apache.maven.plugin.MojoExecutionException;
+import org.apache.maven.plugin.MojoFailureException;
+import org.apache.maven.plugins.annotations.Mojo;
+import org.apache.maven.plugins.annotations.Parameter;
+
+import java.nio.file.Path;
+import java.util.Optional;
+import java.util.function.Consumer;
+
+/**
+ * Restore the target POM file with the backup POM file
+ */
+@Mojo(name = &quot;rollback&quot;)
+<span class="fc" id="L35">public class RollbackMojo extends AbstractMojo {</span>
+
+<span class="fc" id="L37">    @Parameter(property = &quot;pom&quot;, defaultValue = &quot;pom.xml&quot;)</span>
+    String pom = &quot;pom.xml&quot;;
+
+    Consumer&lt;Path&gt; rollbackFunction;
+
+    @Override
+    public void execute() throws MojoExecutionException, MojoFailureException {
+<span class="fc" id="L44">        Path targetPom = Path.of(this.pom);</span>
+        try {
+<span class="fc" id="L46">            getLog().info(String.format(&quot;trying to revert the \&quot;%s\&quot; file...&quot;, targetPom));</span>
+<span class="fc" id="L47">            Optional.ofNullable(rollbackFunction)</span>
+<span class="fc" id="L48">                    .orElse(PomRollback::execute)</span>
+<span class="fc" id="L49">                    .accept(targetPom);</span>
+<span class="fc" id="L50">            getLog().info(String.format(&quot;\&quot;%s\&quot; file has been recovered. Backup file was deleted successfully.&quot;, targetPom));</span>
+<span class="nc" id="L51">        } catch (RuntimeException ex) {</span>
+<span class="nc" id="L52">            throw new MojoFailureException(</span>
+<span class="nc" id="L53">                    String.format(&quot;cannot recover the \&quot;%s\&quot; file: %s&quot;, targetPom,ex.getMessage()), ex);</span>
+<span class="fc" id="L54">        }</span>
+<span class="fc" id="L55">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.9.202303310957</span></div></body></html>

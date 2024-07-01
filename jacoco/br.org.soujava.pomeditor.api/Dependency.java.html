@@ -1,0 +1,233 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Dependency.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">POM Editor Maven Plugin</a> &gt; <a href="index.source.html" class="el_package">br.org.soujava.pomeditor.api</a> &gt; <span class="el_source">Dependency.java</span></div><h1>Dependency.java</h1><pre class="source lang-java linenums">/*
+ * Copyright 2023  the original author or authors.
+ *
+ * Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *
+ */
+
+package br.org.soujava.pomeditor.api;
+
+import java.util.Arrays;
+import java.util.Objects;
+import java.util.stream.Collectors;
+
+/**
+ * Represents a dependency to be added
+ */
+public final class Dependency {
+
+    /**
+     * Returns a {@link DependencyBuilder} instance
+     * @return a {@link DependencyBuilder}
+     */
+    public static DependencyBuilder builder() {
+<span class="fc" id="L34">        return new DependencyBuilder();</span>
+    }
+
+    /**
+     * Returns a {@link DependencyBuilder} based on a GAV - groupId:artifactId:version - parameter
+     *
+     * @param gav a GAV - groupId:artifactId:version - parameter
+     * @return a {@link DependencyBuilder}
+     */
+    public static DependencyBuilder ofGav(String gav) {
+<span class="fc" id="L44">        DependencyBuilder builder = builder();</span>
+<span class="fc" id="L45">        var gavValues = Arrays.stream(gav.split(&quot;:&quot;))</span>
+<span class="fc" id="L46">                .filter(Objects::nonNull)</span>
+<span class="fc bfc" id="L47" title="All 2 branches covered.">                .filter(item -&gt; !item.isBlank())</span>
+<span class="fc" id="L48">                .map(String::trim)</span>
+<span class="fc" id="L49">                .collect(Collectors.toList());</span>
+<span class="fc bfc" id="L50" title="All 2 branches covered.">        if (gavValues.size() &gt;= 1)</span>
+<span class="fc" id="L51">            builder.withGroupId(gavValues.get(0));</span>
+<span class="fc bfc" id="L52" title="All 2 branches covered.">        if (gavValues.size() &gt;= 2)</span>
+<span class="fc" id="L53">            builder.withArtifactId(gavValues.get(1));</span>
+<span class="fc bfc" id="L54" title="All 2 branches covered.">        if (gavValues.size() &gt;= 3)</span>
+<span class="fc" id="L55">            builder.withVersion(gavValues.get(2));</span>
+<span class="fc" id="L56">        return builder;</span>
+    }
+
+    /**
+     * Dependency builder
+     */
+<span class="fc" id="L62">    public static class DependencyBuilder {</span>
+
+        private String groupId;
+        private String artifactId;
+        private String version;
+        private String type;
+        private String classifier;
+        private String scope;
+
+        /**
+         * @param groupId groupId
+         * @return the same {@link DependencyBuilder} instance
+         */
+        public DependencyBuilder withGroupId(String groupId) {
+<span class="fc" id="L76">            this.groupId = groupId;</span>
+<span class="fc" id="L77">            return this;</span>
+        }
+
+        /**
+         * @param artifactId artifactId
+         * @return the same {@link DependencyBuilder} instance
+         */
+        public DependencyBuilder withArtifactId(String artifactId) {
+<span class="fc" id="L85">            this.artifactId = artifactId;</span>
+<span class="fc" id="L86">            return this;</span>
+        }
+
+        /**
+         * @param version version
+         * @return the same {@link DependencyBuilder} instance
+         */
+        public DependencyBuilder withVersion(String version) {
+<span class="fc" id="L94">            this.version = version;</span>
+<span class="fc" id="L95">            return this;</span>
+        }
+
+        /**
+         * @param type type
+         * @return the same {@link DependencyBuilder} instance
+         */
+        public DependencyBuilder withType(String type) {
+<span class="fc" id="L103">            this.type = type;</span>
+<span class="fc" id="L104">            return this;</span>
+        }
+
+        /**
+         * @param classifier classifier
+         * @return the same {@link DependencyBuilder} instance
+         */
+        public DependencyBuilder withClassifier(String classifier) {
+<span class="fc" id="L112">            this.classifier = classifier;</span>
+<span class="fc" id="L113">            return this;</span>
+        }
+
+        /**
+         * @param scope scope
+         * @return the same {@link DependencyBuilder} instance
+         */
+        public DependencyBuilder withScope(String scope) {
+<span class="fc" id="L121">            this.scope = scope;</span>
+<span class="fc" id="L122">            return this;</span>
+        }
+
+        /**
+         * @return a {@link Dependency} instance
+         */
+        public Dependency build() {
+<span class="fc" id="L129">            return new Dependency(groupId, artifactId, version, type, classifier, scope);</span>
+        }
+    }
+
+    private final String groupId;
+    private final String artifactId;
+    private final String version;
+    private final String type;
+    private final String classifier;
+    private final String scope;
+
+<span class="fc" id="L140">    private Dependency(String groupId, String artifactId, String version, String type, String classifier, String scope) {</span>
+<span class="fc bfc" id="L141" title="All 4 branches covered.">        if (groupId == null || groupId.isBlank())</span>
+<span class="fc" id="L142">            throw new IllegalArgumentException(&quot;groupId must be provided&quot;);</span>
+
+<span class="fc bfc" id="L144" title="All 4 branches covered.">        if (artifactId == null || artifactId.isBlank())</span>
+<span class="fc" id="L145">            throw new IllegalArgumentException(&quot;artifactId must be provided&quot;);</span>
+
+<span class="fc" id="L147">        this.groupId = groupId;</span>
+<span class="fc" id="L148">        this.artifactId = artifactId;</span>
+<span class="fc" id="L149">        this.version = version;</span>
+<span class="fc" id="L150">        this.type = type;</span>
+<span class="fc" id="L151">        this.classifier = classifier;</span>
+<span class="fc" id="L152">        this.scope = scope;</span>
+<span class="fc" id="L153">    }</span>
+
+    /**
+     * @return the groupId
+     */
+    public String getGroupId() {
+<span class="fc" id="L159">        return groupId;</span>
+    }
+
+    /**
+     * @return artifactId
+     */
+    public String getArtifactId() {
+<span class="fc" id="L166">        return artifactId;</span>
+    }
+
+    /**
+     * @return version
+     */
+    public String getVersion() {
+<span class="fc" id="L173">        return version;</span>
+    }
+
+    /**
+     * @return type
+     */
+    public String getType() {
+<span class="fc" id="L180">        return type;</span>
+    }
+
+    /**
+     * @return classifier
+     */
+    public String getClassifier() {
+<span class="fc" id="L187">        return classifier;</span>
+    }
+
+    /**
+     * @return scope
+     */
+    public String getScope() {
+<span class="fc" id="L194">        return scope;</span>
+    }
+
+    @Override
+    public boolean equals(Object o) {
+<span class="nc bnc" id="L199" title="All 2 branches missed.">        if (this == o) return true;</span>
+<span class="nc bnc" id="L200" title="All 4 branches missed.">        if (o == null || getClass() != o.getClass()) return false;</span>
+<span class="nc" id="L201">        Dependency that = (Dependency) o;</span>
+<span class="nc bnc" id="L202" title="All 2 branches missed.">        return Objects.equals(groupId, that.groupId)</span>
+<span class="nc bnc" id="L203" title="All 2 branches missed.">                &amp;&amp; Objects.equals(artifactId, that.artifactId)</span>
+<span class="nc bnc" id="L204" title="All 2 branches missed.">                &amp;&amp; Objects.equals(version, that.version)</span>
+<span class="nc bnc" id="L205" title="All 2 branches missed.">                &amp;&amp; Objects.equals(type, that.type)</span>
+<span class="nc bnc" id="L206" title="All 2 branches missed.">                &amp;&amp; Objects.equals(classifier, that.classifier)</span>
+<span class="nc bnc" id="L207" title="All 2 branches missed.">                &amp;&amp; Objects.equals(scope, that.scope);</span>
+    }
+
+    @Override
+    public String toString() {
+<span class="fc" id="L212">        StringBuilder sb = new StringBuilder();</span>
+<span class="fc" id="L213">        sb.append(&quot;{&quot;);</span>
+<span class="fc" id="L214">        sb.append(&quot;groupId='&quot; + groupId + '\'');</span>
+<span class="fc" id="L215">        sb.append(&quot;, artifactId='&quot; + artifactId + '\'');</span>
+<span class="pc bpc" id="L216" title="1 of 2 branches missed.">        if (version != null)</span>
+<span class="fc" id="L217">            sb.append(&quot;, version='&quot; + version + '\'');</span>
+<span class="pc bpc" id="L218" title="1 of 2 branches missed.">        if (type != null)</span>
+<span class="fc" id="L219">            sb.append(&quot;, type='&quot; + type + '\'');</span>
+<span class="pc bpc" id="L220" title="1 of 2 branches missed.">        if (classifier != null)</span>
+<span class="fc" id="L221">            sb.append(&quot;, classifier='&quot; + classifier + '\'');</span>
+<span class="pc bpc" id="L222" title="1 of 2 branches missed.">        if (scope != null)</span>
+<span class="fc" id="L223">            sb.append(&quot;, scope='&quot; + scope + '\'');</span>
+<span class="fc" id="L224">        sb.append(&quot;}&quot;);</span>
+<span class="fc" id="L225">        return sb.toString();</span>
+    }
+
+    @Override
+    public int hashCode() {
+<span class="nc" id="L230">        return Objects.hash(groupId, artifactId, version, type, classifier, scope);</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.9.202303310957</span></div></body></html>

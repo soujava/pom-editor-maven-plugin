@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Property.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">POM Editor Maven Plugin</a> &gt; <a href="index.source.html" class="el_package">br.org.soujava.pomeditor.api</a> &gt; <span class="el_source">Property.java</span></div><h1>Property.java</h1><pre class="source lang-java linenums">/*
+ * Copyright 2024  the original author or authors.
+ *
+ * Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *
+ */
+
+package br.org.soujava.pomeditor.api;
+
+import java.util.Objects;
+
+/**
+ * Represents a property to be changed
+ */
+public final class Property {
+
+    /**
+     * Returns a {@link PropertyBuilder} instance
+     * @return a {@link PropertyBuilder}
+     */
+    public static PropertyBuilder builder() {
+<span class="fc" id="L32">        return new PropertyBuilder();</span>
+    }
+
+    /**
+     * Returns a {@link PropertyBuilder} based on the specified property name and value.
+     * @param name property name
+     * @param value property value, or {@code null} to request removal
+     * @return a {@link PropertyBuilder}
+     */
+    public static PropertyBuilder of(String name, String value) {
+
+<span class="fc" id="L43">        return builder().withName(name).withValue(value);</span>
+
+    }
+
+    /**
+     * Dependency builder
+     */
+<span class="fc" id="L50">    public static class PropertyBuilder {</span>
+
+        private String name;
+        private String value;
+
+        /**
+         * @param name property name
+         * @return {@code this} {@link PropertyBuilder} instance
+         */
+        public PropertyBuilder withName(String name) {
+<span class="fc" id="L60">            this.name = name;</span>
+<span class="fc" id="L61">            return this;</span>
+        }
+
+        /**
+         * @param value property value
+         * @return {@code this} {@link PropertyBuilder} instance
+         */
+        public PropertyBuilder withValue(String value) {
+<span class="fc" id="L69">            this.value = value;</span>
+<span class="fc" id="L70">            return this;</span>
+        }
+
+        /**
+         * @return a new {@link Property} instance
+         */
+        public Property build() {
+<span class="fc" id="L77">            return new Property(name, value);</span>
+        }
+    }
+
+    private final String name;
+    private final String value;
+
+<span class="fc" id="L84">    private Property(String name, String value) {</span>
+
+<span class="fc bfc" id="L86" title="All 4 branches covered.">        if (name == null || name.isBlank()) {</span>
+<span class="fc" id="L87">            throw new IllegalArgumentException(&quot;name must be provided&quot;);</span>
+        }
+
+<span class="fc" id="L90">        this.name = name;</span>
+<span class="fc" id="L91">        this.value = value;</span>
+
+<span class="fc" id="L93">    }</span>
+
+    public String getName() {
+<span class="fc" id="L96">        return name;</span>
+    }
+
+    public String getValue() {
+<span class="fc" id="L100">        return value;</span>
+    }
+
+    @Override
+    public boolean equals(Object o) {
+<span class="nc bnc" id="L105" title="All 2 branches missed.">        if (this == o) return true;</span>
+<span class="nc bnc" id="L106" title="All 4 branches missed.">        if (o == null || getClass() != o.getClass()) return false;</span>
+<span class="nc" id="L107">        Property that = (Property) o;</span>
+<span class="nc bnc" id="L108" title="All 2 branches missed.">        return Objects.equals(name, that.name)</span>
+<span class="nc bnc" id="L109" title="All 2 branches missed.">                &amp;&amp; Objects.equals(value, that.value);</span>
+    }
+
+    @Override
+    public String toString() {
+<span class="fc" id="L114">        StringBuilder sb = new StringBuilder();</span>
+<span class="fc" id="L115">        sb.append(&quot;{&quot;);</span>
+<span class="fc" id="L116">        sb.append(&quot;name='&quot;).append(name).append('\'');</span>
+<span class="fc" id="L117">        sb.append(&quot;, value='&quot;).append(value).append('\'');</span>
+<span class="fc" id="L118">        sb.append(&quot;}&quot;);</span>
+<span class="fc" id="L119">        return sb.toString();</span>
+    }
+
+    @Override
+    public int hashCode() {
+<span class="nc" id="L124">        return Objects.hash(name, value);</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.9.202303310957</span></div></body></html>

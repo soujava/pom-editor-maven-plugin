@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>ChangePropertyMojo.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">POM Editor Maven Plugin</a> &gt; <a href="index.source.html" class="el_package">br.org.soujava.pomeditor.mojo</a> &gt; <span class="el_source">ChangePropertyMojo.java</span></div><h1>ChangePropertyMojo.java</h1><pre class="source lang-java linenums">/*
+ * Copyright 2024  the original author or authors.
+ *
+ * Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *
+ */
+
+package br.org.soujava.pomeditor.mojo;
+
+import br.org.soujava.pomeditor.api.ChangeProperty;
+import br.org.soujava.pomeditor.api.Property;
+import org.apache.maven.plugin.MojoExecutionException;
+import org.apache.maven.plugin.MojoFailureException;
+import org.apache.maven.plugins.annotations.Mojo;
+import org.apache.maven.plugins.annotations.Parameter;
+
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.Optional;
+import java.util.function.BiConsumer;
+
+/**
+ * Mojo responsible for setting (potentially overwriting), or removing a property value.
+ */
+@Mojo(name = &quot;change-prop&quot;)
+<span class="fc" id="L36">public class ChangePropertyMojo extends EditingMojo {</span>
+
+    @Parameter(property = &quot;property&quot;, required = true)
+    String property;
+    @Parameter(property = &quot;value&quot;)
+    String value;
+
+    BiConsumer&lt;Path, Property&gt; changePropertyCommand;
+
+    @Override
+    public void execute() throws MojoExecutionException, MojoFailureException {
+
+<span class="fc" id="L48">        Path pomFile = Paths.get(pom);</span>
+<span class="fc" id="L49">        Property property = buildProperty();</span>
+
+        try {
+
+<span class="fc" id="L53">            getLog().info(String.format(&quot;Changing property %s on \&quot;%s\&quot; POM file...&quot;, property, pomFile));</span>
+
+<span class="fc" id="L55">            change(pomFile).execute(() -&gt; changePropertyCommand().accept(pomFile, property));</span>
+
+<span class="fc" id="L57">            getLog().info(String.format(&quot;Handled property %s on \&quot;%s\&quot; POM file.&quot;, property, pomFile));</span>
+
+<span class="nc" id="L59">        } catch (Throwable ex) {</span>
+<span class="nc" id="L60">            throw new MojoFailureException(String.format(&quot;Failed to handle property %s on \&quot;%s\&quot; POM file: %s&quot;,</span>
+                    property,
+                    pomFile,
+<span class="nc" id="L63">                    ex.getMessage()), ex);</span>
+<span class="fc" id="L64">        }</span>
+<span class="fc" id="L65">    }</span>
+
+    private BiConsumer&lt;Path, Property&gt; changePropertyCommand() {
+<span class="fc" id="L68">        return Optional</span>
+<span class="fc" id="L69">                .ofNullable(this.changePropertyCommand)</span>
+<span class="pc" id="L70">                .orElse((path,prop)-&gt;ChangeProperty.execute(getLog(), path, prop));</span>
+    }
+
+    private Property buildProperty() throws MojoExecutionException {
+        try {
+<span class="fc" id="L75">            return Property.of(property, value).build();</span>
+<span class="fc" id="L76">        } catch (RuntimeException ex) {</span>
+<span class="fc" id="L77">            throw new MojoExecutionException(ex.getMessage(), ex);</span>
+        }
+    }
+
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.9.202303310957</span></div></body></html>

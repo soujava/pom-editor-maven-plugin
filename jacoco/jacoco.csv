@@ -1,0 +1,17 @@
+GROUP,PACKAGE,CLASS,INSTRUCTION_MISSED,INSTRUCTION_COVERED,BRANCH_MISSED,BRANCH_COVERED,LINE_MISSED,LINE_COVERED,COMPLEXITY_MISSED,COMPLEXITY_COVERED,METHOD_MISSED,METHOD_COVERED
+POM Editor Maven Plugin,br.org.soujava.pomeditor.api,ChangeProperty,123,0,12,0,33,0,9,0,3,0
+POM Editor Maven Plugin,br.org.soujava.pomeditor.api,PomChange.PomChangeBuilder,0,42,0,0,0,11,0,6,0,6
+POM Editor Maven Plugin,br.org.soujava.pomeditor.api,Property.PropertyBuilder,0,21,0,0,0,6,0,4,0,4
+POM Editor Maven Plugin,br.org.soujava.pomeditor.api,Dependency,91,184,22,20,10,46,15,19,2,11
+POM Editor Maven Plugin,br.org.soujava.pomeditor.api,PomChange,9,122,0,4,2,31,0,9,0,7
+POM Editor Maven Plugin,br.org.soujava.pomeditor.api,PomRollback,9,27,1,1,2,7,1,1,0,1
+POM Editor Maven Plugin,br.org.soujava.pomeditor.api,Property,47,68,10,4,6,16,7,8,2,6
+POM Editor Maven Plugin,br.org.soujava.pomeditor.api,Dependency.DependencyBuilder,0,49,0,0,0,14,0,8,0,8
+POM Editor Maven Plugin,br.org.soujava.pomeditor.api,AddDependency,149,0,10,0,39,0,15,0,10,0
+POM Editor Maven Plugin,br.org.soujava.pomeditor.api,PomCommit,0,16,1,1,0,5,1,1,0,1
+POM Editor Maven Plugin,br.org.soujava.pomeditor.mojo,EditingMojo,0,24,0,0,0,9,0,2,0,2
+POM Editor Maven Plugin,br.org.soujava.pomeditor.mojo,ChangePropertyMojo,29,81,0,0,3,14,1,5,1,5
+POM Editor Maven Plugin,br.org.soujava.pomeditor.mojo,RollbackMojo,19,44,0,0,3,10,0,2,0,2
+POM Editor Maven Plugin,br.org.soujava.pomeditor.mojo,AddDependencyMojo,23,87,0,0,3,19,0,5,0,5
+POM Editor Maven Plugin,br.org.soujava.pomeditor.mojo,CommitMojo,20,37,0,0,3,10,0,2,0,2
+POM Editor Maven Plugin,br.org.soujava.pomeditor.mojo,GreetingMojo,0,16,0,0,0,3,0,2,0,2
