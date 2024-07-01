@@ -10,6 +10,7 @@ and this project adheres to https://semver.org/spec/v2.0.0.html[Semantic Version
 
 === Added
 - Enhance integration tests for `commit` and `rollback` mojos;
+- Added the `change-prop` mojo in order to be able to change a property value in the target POM;
 
 
 === Changes
@@ -25,6 +26,24 @@ and this project adheres to https://semver.org/spec/v2.0.0.html[Semantic Version
 
 === Fixes
 - ?
+
+== [1.1.0-SNAPSHOT]
+
+=== Added
+- Enhance integration tests for `commit` and `rollback` mojos;
+- Added the `change-prop` mojo in order to be able to change a property value in the target POM;
+
+
+=== Changes
+- Changed package structure: the model classes were moved to the `api` package;
+- Changed package structure: the mojo classes were moved to the `mojo` package;
+- Refactored classes to improve the maintainability;
+- Refactored `add-dep` mojo to use new implementation;
+- Refactored `commit` mojo to use new implementation;
+- Refactored `rollback` mojo to use new implementation;
+- Enhanced tests for `api` classes;
+- Enhanced tests for `mojo` classes;
+- Enhanced integration tests for `commit` and `rollback` mojos;
 
 == [1.0.0-SNAPSHOT]
 
