@@ -9,6 +9,17 @@ and this project adheres to https://semver.org/spec/v2.0.0.html[Semantic Version
 == [Unreleased]
 
 === Added
+- ?
+
+=== Changes
+- ?
+
+=== Fixes
+- ?
+
+== [1.0.0]
+
+=== Added
 - Enhance integration tests for `commit` and `rollback` mojos;
 - Added the `change-prop` mojo in order to be able to change a property value in the target POM;
 
