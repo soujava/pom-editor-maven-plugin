@@ -32,6 +32,7 @@ public interface ChangeProperty {
     /**
      * Change a property based on the {@link Property} instance into the target POM xml
      *
+     * @param log          it's the logger
      * @param pom        it's the target POM xml
      * @param property   it's a {@link Property} instance
      */

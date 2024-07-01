@@ -36,6 +36,8 @@ public final class Dependency {
 
     /**
      * Returns a {@link DependencyBuilder} based on a GAV - groupId:artifactId:version - parameter
+     *
+     * @param gav a GAV - groupId:artifactId:version - parameter
      * @return a {@link DependencyBuilder}
      */
     public static DependencyBuilder ofGav(String gav) {
