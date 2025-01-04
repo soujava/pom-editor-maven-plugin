@@ -20,7 +20,7 @@
 
     <groupId>br.org.soujava</groupId>
     <artifactId>pom-editor-maven-plugin</artifactId>
-    <version>1.1.1-SNAPSHOT</version>
+    <version>1.0.0-SNAPSHOT</version>
     <packaging>maven-plugin</packaging>
 
     <organization>
