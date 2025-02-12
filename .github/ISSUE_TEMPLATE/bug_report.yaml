@@ -1,64 +1,46 @@
-name: 🐛 Bug Report
-description: Report a reproducible bug
-labels: ["bug"]
-projects: ["soujava/3"]
+name: Bug report 🐞
+description: File a bug report
+title: "[Bug] "
+labels: bug
 body:
-  - type: markdown
+  - type: checkboxes
+    id: existing-issue
     attributes:
-      value: |
-        Please provide all the information requested. Issues that do not follow this format are likely to stall.
-        
-        Please test using the latest POM Editor Maven Plugin release to make sure your issue has not already been fixed: https://github.com/soujava/pom-editor-maven-plugin/releases 
+      label: Is there an existing issue for this?
+      description: Please search to see if an issue already exists for the bug you encountered.
+      options:
+        - label: I have searched the existing issues
+          required: true
   - type: textarea
-    id: description
+    id: what-happened
     attributes:
-      label: Description
-      description: |
-        Please provide a clear and concise description of what the bug is. 
-        Include screenshots if needed.
+      label: Describe the bug
+      description: A concise description of what you are experiencing.
+      placeholder: Tell us what you see!
     validations:
       required: true
   - type: textarea
-    id: evidences
+    id: expected-behaviour
     attributes:
-      label: Evidences
-      description: |
-        Please, provide a link to a repository on GitHub, or provide a minimal code example that reproduces the problem.
-        You may provide a screenshot of the application if you think it is relevant to your bug report.
-        Here are some tips for providing a minimal example: https://stackoverflow.com/help/mcve
+      label: Expected behavior
+      description: A clear and concise description of what you expected to happen.
     validations:
       required: true
-      
   - type: textarea
-    id: steps-to-produce
+    id: screenshots
     attributes:
-      label: Steps To Reproduce
-      description: |
-        Please, provide a detailed list of steps that reproduce the issue.
-    validations:
-      required: true
-      
+      label: Add Screenshots 
+      description: Add sufficient screenshots to explain your issue.
   - type: textarea
-    id: expected-results
+    id: environment-configuration
     attributes:
-      label: Expected Results
-      description: |
-        Describe what you expected to happen.
-    validations:
-      required: false
-      
-  - type: textarea
-    id: solution-ideas
+      label: Environment and Configuration
+  - type: checkboxes
+    id: terms
     attributes:
-      label: Any idea for solving this issue?
-      description: |
-        Please, share with us your ideas for solving this issue if you have any.
-    validations:
-      required: false   
-      
-  - type: markdown
-    attributes:
-      value: |
-        ### Code of Conduct
-        By submitting this issue, you agree to follow our [Code of Conduct](https://github.com/soujava/pom-editor-maven-plugin/blob/main/CODE_OF_CONDUCT.adoc)
-     
+      label: Record
+      options:
+        - label: "I have read the Contributing Guidelines"
+          required: true
+        - label: "I have starred the repository"
+          required: true
