@@ -3,18 +3,16 @@ description: File a bug report
 title: "[Bug] "
 labels: bug
 body:
-  - type: checkboxes
+  - type: input
     id: existing-issue
     attributes:
       label: Is there an existing issue for this?
-      description: Please search to see if an issue already exists for the bug you encountered.
-      options:
-        - label: I have searched the existing issues
-          required: true
+      description: Please provide a link to the existing issue if applicable. If none exists, leave this blank.
+      placeholder: "Paste the issue link here (if available)"
   - type: textarea
     id: what-happened
     attributes:
-      label: Describe the bug
+      label: Describe the Bug
       description: A concise description of what you are experiencing.
       placeholder: Tell us what you see!
     validations:
@@ -22,19 +20,29 @@ body:
   - type: textarea
     id: expected-behaviour
     attributes:
-      label: Expected behavior
+      label: Expected Behavior
       description: A clear and concise description of what you expected to happen.
     validations:
       required: true
   - type: textarea
-    id: screenshots
+    id: reproduction-steps
     attributes:
-      label: Add Screenshots 
-      description: Add sufficient screenshots to explain your issue.
+      label: Steps to Reproduce & Screenshots 📸
+      description: |
+        Please list the steps to reproduce this issue along with relevant screenshots. 
+        This helps us diagnose and resolve the bug more efficiently.
+      placeholder: |
+        1. Go to '...'
+        2. Click on '...'
+        3. Scroll down to '...'
+        4. See error message...
+        
+        (Attach screenshots or GIFs below to demonstrate the issue)
   - type: textarea
     id: environment-configuration
     attributes:
       label: Environment and Configuration
+      description: Provide details about your system and environment (e.g., OS, browser, dependencies, versions).
   - type: checkboxes
     id: terms
     attributes:

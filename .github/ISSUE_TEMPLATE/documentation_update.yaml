@@ -1,16 +1,15 @@
 name: Documentation Update 📝
+
 description: Improve Documentation
 title: "[Documentation Update]: "
 labels: 'documentation'
 body:
-  - type: checkboxes
-    id: existing-issue
+  - type: input
+    id: existing-issue-link
     attributes:
-      label: Is there an existing issue for this?
-      description: Please search to see if an issue already exists for the updates you want to make.
-      options:
-        - label: I have searched the existing issues
-          required: false  # Made optional so users can submit without prior issue check
+      label: Link to Existing Issue
+      description: If an issue already exists for this update, please provide the link. Otherwise, leave it blank.
+      placeholder: "https://github.com/owner/repository/issues/123"
   - type: textarea
     id: issue-description
     attributes:

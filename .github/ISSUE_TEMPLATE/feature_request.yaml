@@ -3,14 +3,12 @@ description: Suggest a feature
 title: "[Feature Request] "
 labels: enhancement
 body:
-  - type: checkboxes
+  - type: input
     id: existing-issue
     attributes:
       label: Is there an existing issue for this?
-      description: Please search to see if an issue already exists for this feature.
-      options:
-        - label: I have searched the existing issues
-          required: false  # Changed from true to false, making this optional
+      description: "If there is an existing issue related to this feature request, please provide the link. Otherwise, you may leave this blank."
+      placeholder: "https://github.com/owner/repository/issues/123"
   - type: textarea
     id: feature-description
     attributes:
@@ -37,7 +35,7 @@ body:
     id: screenshots
     attributes:
       label: Add Screenshots
-      description: If any...
+      description: If applicable, add screenshots or visual references.
   - type: dropdown
     id: priority
     attributes:
@@ -58,4 +56,4 @@ body:
         - label: "I have read the Contributing Guidelines"
           required: true
         - label: "I have starred the repository"
-          required: false  # Changed from true to false, making this optional
+          required: false  # Made optional so users are not forced to star the repo
